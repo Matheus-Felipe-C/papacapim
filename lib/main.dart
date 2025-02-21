@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:papacapim/features/auth/login.dart';
+import 'package:papacapim/styles.dart';
 
 void main() {
   runApp(const MainApp());
@@ -11,6 +12,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(useMaterial3: false),
       home: const HomeScreen(),
     );
   }
@@ -29,22 +31,27 @@ class HomeScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text("Boas vindas"),
+            const Text("Boas vindas", style: AppStyles.heading),
             const SizedBox(height: 100),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(context,
-                MaterialPageRoute(
-                  builder: (context) => LoginPage() 
-                  ) 
-                );
-              },
-              child: const Text('Login'),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => LoginPage()));
+                },
+                style: AppStyles.elevatedButton,
+                child: const Text('Login'),
+              ),
             ),
             const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () {},
-              child: const Text('Increver-se'),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: ElevatedButton(
+                onPressed: () {},
+                style: AppStyles.elevatedButton,
+                child: const Text('Increver-se'),
+              ),
             ),
             const SizedBox(height: 40),
           ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../styles.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -15,8 +16,7 @@ class LoginPage extends StatelessWidget {
             mainAxisSize: MainAxisSize
                 .min, // ⬅️ Ensures the column only takes the necessary space
             children: [
-              const Text("Faça login",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+              const Text("Faça login", style: AppStyles.heading),
               const SizedBox(height: 20),
               const TextField(
                 decoration: InputDecoration(
@@ -41,6 +41,7 @@ class LoginPage extends StatelessWidget {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {},
+                style: AppStyles.elevatedButton,
                 child: const Text('Entrar'),
               ),
             ],
