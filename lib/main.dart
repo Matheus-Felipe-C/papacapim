@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:papacapim/features/auth/login.dart';
+import 'package:papacapim/features/auth/views/login.dart';
 import 'package:papacapim/styles.dart';
 
 void main() {
