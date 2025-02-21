@@ -5,15 +5,12 @@ void main() {
   runApp(const MainApp());
 }
 
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      navigatorKey: navigatorKey, // 👈 Ensures Navigator is always accessible
       home: const HomeScreen(),
     );
   }
@@ -36,8 +33,10 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 100),
             ElevatedButton(
               onPressed: () {
-                navigatorKey.currentState?.push(
-                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                Navigator.push(context,
+                MaterialPageRoute(
+                  builder: (context) => LoginPage() 
+                  ) 
                 );
               },
               child: const Text('Login'),
