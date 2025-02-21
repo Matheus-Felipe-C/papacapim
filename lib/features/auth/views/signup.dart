@@ -1,33 +1,34 @@
 import 'package:flutter/material.dart';
-import '../../../styles.dart';
+import 'package:papacapim/styles.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class SignupPage extends StatelessWidget {
+  const SignupPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Login")),
+      appBar: AppBar(title: const Text("Sign-up")),
       body: Center(
-        // ⬅️ This centers the Column on the screen
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Column(
-            mainAxisSize: MainAxisSize
-                .min, // ⬅️ Ensures the column only takes the necessary space
+            mainAxisSize: MainAxisSize.min,
             children: [
-              const Text("Faça login", style: AppStyles.heading),
+              const Text("Inscreva-se", style: AppStyles.heading),
               const SizedBox(height: 20),
+              TextField(decoration: AppStyles.textFieldDecoration("Nome")),
+              const SizedBox(height: 10),
               TextField(decoration: AppStyles.textFieldDecoration("Email")),
               const SizedBox(height: 10),
               TextField(
-                  decoration: AppStyles.textFieldDecoration("Senha"),
-                  obscureText: true),
+                decoration: AppStyles.textFieldDecoration("Senha"),
+                obscureText: true,
+              ),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {},
                 style: AppStyles.elevatedButton,
-                child: const Text('Entrar'),
+                child: const Text("Inscrever-se"),
               ),
             ],
           ),

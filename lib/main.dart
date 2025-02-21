@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:papacapim/features/auth/views/login.dart';
+import 'package:papacapim/features/auth/views/signup.dart';
 import 'package:papacapim/styles.dart';
 
 void main() {
@@ -48,7 +49,10 @@ class HomeScreen extends StatelessWidget {
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.8,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SignupPage()));
+                },
                 style: AppStyles.elevatedButton,
                 child: const Text('Increver-se'),
               ),
