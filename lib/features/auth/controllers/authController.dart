@@ -1,6 +1,11 @@
 import 'package:papacapim/features/auth/models/user.dart';
 
-class Authcontroller {
+class AuthController {
+  // Esses atributos transformam o AuthController em um Singleton, que pode ser utilizado por todo o app
+  static final AuthController _instance = AuthController._internal();
+  factory AuthController() => _instance;
+  AuthController._internal();
+  
   User? currentUser;
 
   /// Cria um usuário

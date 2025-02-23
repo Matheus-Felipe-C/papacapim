@@ -13,8 +13,14 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      initialRoute: '/',
+      routes: {
+        '/': (context) => HomeScreen(),
+        '/home': (context) => HomeScreen(),
+        '/login': (context) => LoginPage(),
+        '/signup': (context) => SignupPage(),
+      },
       theme: ThemeData(useMaterial3: false),
-      home: const HomeScreen(),
     );
   }
 }
@@ -51,7 +57,7 @@ class HomeScreen extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SignupPage()));
+                      MaterialPageRoute(builder: (context) => SignupPage()));
                 },
                 style: AppStyles.elevatedButton,
                 child: const Text('Increver-se'),
