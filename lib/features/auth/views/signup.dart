@@ -13,7 +13,8 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   void _signup() {
     String name = _nameController.text;
@@ -21,7 +22,8 @@ class _SignupPageState extends State<SignupPage> {
     String password = _passwordController.text;
     String confirmPassword = _confirmPasswordController.text;
 
-    bool success = AuthController().createUser(name, username, password, confirmPassword);
+    bool success =
+        AuthController().createUser(name, username, password, confirmPassword);
 
     if (success) {
       print("User registered!");
@@ -30,7 +32,7 @@ class _SignupPageState extends State<SignupPage> {
       print("Passwords do not match!");
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,9 +45,13 @@ class _SignupPageState extends State<SignupPage> {
             children: [
               const Text("Inscreva-se", style: AppStyles.heading),
               const SizedBox(height: 20),
-              TextField(controller: _nameController, decoration: AppStyles.textFieldDecoration("Nome")),
+              TextField(
+                  controller: _nameController,
+                  decoration: AppStyles.textFieldDecoration("Nome")),
               const SizedBox(height: 10),
-              TextField(controller: _usernameController, decoration: AppStyles.textFieldDecoration("Username")),
+              TextField(
+                  controller: _usernameController,
+                  decoration: AppStyles.textFieldDecoration("Username")),
               const SizedBox(height: 10),
               TextField(
                 controller: _passwordController,
@@ -53,7 +59,10 @@ class _SignupPageState extends State<SignupPage> {
                 obscureText: true,
               ),
               const SizedBox(height: 20),
-              TextField(controller: _confirmPasswordController, decoration: AppStyles.textFieldDecoration("Confirme a senha")),
+              TextField(
+                  controller: _confirmPasswordController,
+                  decoration: AppStyles.textFieldDecoration("Confirme a senha"),
+                  obscureText: true),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
