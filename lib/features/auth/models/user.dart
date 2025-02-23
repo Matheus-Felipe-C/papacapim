@@ -1,15 +1,7 @@
 class User {
-  final String login;
-  final String name;
-  final String password;
-  final String? confirmPassword;
+  String name;
+  String username;
+  String password;
 
-  User({
-    required this.login, 
-    required this.name, 
-    required this.password,
-    this.confirmPassword,
-  });
-
-
+  User({required this.name, required this.username, required this.password});
 }
