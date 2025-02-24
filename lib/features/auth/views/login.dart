@@ -21,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
 
     if (isValid) {
       print("Login feito com sucesso!");
-      Navigator.pushReplacementNamed(context, '/home'); // Volta pra home page
+      Navigator.pushReplacementNamed(context, '/feed'); // Redireciona para o feed
     } else {
       print('Credenciais inválidas');
     }

@@ -27,7 +27,7 @@ class _SignupPageState extends State<SignupPage> {
 
     if (success) {
       print("User registered!");
-      Navigator.pop(context); // Return to login
+      Navigator.pushReplacementNamed(context, '/feed'); // Redireciona para o feed
     } else {
       print("Passwords do not match!");
     }
