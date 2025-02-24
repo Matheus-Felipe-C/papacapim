@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:papacapim/features/auth/views/login.dart';
 import 'package:papacapim/features/auth/views/signup.dart';
 import 'package:papacapim/features/feed/views/feed.dart';
+import 'package:papacapim/features/profile/views/userProfileWidget.dart';
 import 'package:papacapim/styles.dart';
 
 void main() {
@@ -21,6 +22,7 @@ class MainApp extends StatelessWidget {
         '/login': (context) => LoginPage(),
         '/signup': (context) => SignupPage(),
         '/feed': (context) => Feed(),
+        '/profile': (context) => UserProfileWidget(),
       },
       theme: ThemeData(useMaterial3: false),
     );

@@ -15,7 +15,15 @@ class _FeedState extends State<Feed> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Feed")),
+      appBar: AppBar(
+        title: Text("Feed"),
+        leading: IconButton(
+          icon: const Icon(Icons.person),
+          onPressed: () {
+            Navigator.pushNamed(context, '/profile');
+          },
+        ),
+      ),
       body: ListView.builder(
         itemCount: feedController.posts.length,
         itemBuilder: (context, index) {
