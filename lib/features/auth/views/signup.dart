@@ -27,7 +27,11 @@ class _SignupPageState extends State<SignupPage> {
 
     if (success) {
       print("User registered!");
-      Navigator.pushReplacementNamed(context, '/feed'); // Redireciona para o feed
+      Navigator.pushNamedAndRemoveUntil(
+          context,
+          '/feed',
+          (route) =>
+              false); // Redireciona para o feed e remove todos os itens da stack
     } else {
       print("Passwords do not match!");
     }

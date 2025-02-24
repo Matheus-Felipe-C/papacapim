@@ -46,8 +46,7 @@ class HomeScreen extends StatelessWidget {
               width: MediaQuery.of(context).size.width * 0.8,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => LoginPage()));
+                  Navigator.pushNamed(context, '/login');
                 },
                 style: AppStyles.elevatedButton,
                 child: const Text('Login'),
@@ -58,8 +57,7 @@ class HomeScreen extends StatelessWidget {
               width: MediaQuery.of(context).size.width * 0.8,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => SignupPage()));
+                  Navigator.pushNamed(context, '/signup');
                 },
                 style: AppStyles.elevatedButton,
                 child: const Text('Increver-se'),

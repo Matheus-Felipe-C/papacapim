@@ -21,7 +21,11 @@ class _LoginPageState extends State<LoginPage> {
 
     if (isValid) {
       print("Login feito com sucesso!");
-      Navigator.pushReplacementNamed(context, '/feed'); // Redireciona para o feed
+      Navigator.pushNamedAndRemoveUntil(
+          context,
+          '/feed',
+          (route) =>
+              false); // Redireciona para o feed e remove todos os itens da stack
     } else {
       print('Credenciais inválidas');
     }
@@ -41,7 +45,9 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               const Text("Faça login", style: AppStyles.heading),
               const SizedBox(height: 20),
-              TextField(controller: _usernameController, decoration: AppStyles.textFieldDecoration("Email")),
+              TextField(
+                  controller: _usernameController,
+                  decoration: AppStyles.textFieldDecoration("Email")),
               const SizedBox(height: 10),
               TextField(
                   controller: _passwordController,
