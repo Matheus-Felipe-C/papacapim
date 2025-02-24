@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:papacapim/features/feed/views/post.dart';
 
 class Feed extends StatelessWidget {
 
@@ -6,15 +7,20 @@ class Feed extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<Map<String, String>> posts = [
+      {"content": "This is the first post"},
+      {"content": "This is the second post"},
+    ];
+
     return Scaffold(
       appBar: AppBar(title: Text("Feed")),
-      body: ListView(
-        padding: EdgeInsets.all(16.0),
-        children: List.generate(20, (index) => Container(
-          height: 100,
-          margin: EdgeInsets.only(bottom: 10),
-          color: Colors.blueGrey[100],
-        )),
+      body: ListView.builder(
+        itemCount: posts.length,
+        itemBuilder: (context, index) {
+          return Post(
+            content: posts[index]["content"]!,
+          );
+        },
       ),
     );   
   }
