@@ -33,17 +33,16 @@ class _FeedState extends State<Feed> {
             MaterialPageRoute(builder: (context) => const NewPostScreen()),
           );
 
-          print("Novo post recebido: $newPost");
-
           if (newPost != null && authController.currentUser != null) {
             setState(() {
               feedController.addPost(
                   newPost["message"], authController.currentUser!);
             });
-          } else {
+          } else if (authController.currentUser == null) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                  content: Text("You must be logged in to create a post.")),
+                  content: Text(
+                      "Você precisa estar autenticado para criar um novo post.")),
             );
           }
         },
