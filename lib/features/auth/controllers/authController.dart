@@ -34,3 +34,6 @@ class AuthController {
     currentUser = null;
   }
 }
+
+// Cria uma instância global do AuthController
+final authController = AuthController();

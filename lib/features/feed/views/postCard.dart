@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:papacapim/styles.dart';
 
-class Post extends StatelessWidget {
-  final String content;
+class PostCard extends StatelessWidget {
+  final String message;
+  final String username;
 
-  const Post({super.key, required this.content});
+  const PostCard({super.key, required this.message, required this.username});
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +16,13 @@ class Post extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text("@$username",
+                style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey)),
             Text(
-              content,
+              message,
               style: AppStyles.bodyText,
             )
           ],
