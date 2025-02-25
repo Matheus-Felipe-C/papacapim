@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:papacapim/features/auth/controllers/authController.dart';
+import 'package:papacapim/features/auth/models/user.dart';
 import 'package:papacapim/features/feed/controllers/feedController.dart';
 import 'package:papacapim/features/feed/views/newPostScreen.dart';
 import 'package:papacapim/features/feed/views/postCard.dart';
@@ -12,11 +13,14 @@ class Feed extends StatefulWidget {
 }
 
 class _FeedState extends State<Feed> {
+  final FeedController feedController = FeedController();
+  final AuthController authController = AuthController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Feed"),
+        title: const Text("Feed"),
         leading: IconButton(
           icon: const Icon(Icons.person),
           onPressed: () {
@@ -31,6 +35,13 @@ class _FeedState extends State<Feed> {
           return PostCard(
             message: post.message,
             username: post.user.username,
+            likes: post.likes,
+            isLikedByCurrentUser: post.isLikedByCurrentUser,
+            onLikePressed: () {
+              setState(() {
+                feedController.toggleLike(post);
+              });
+            },
           );
         },
       ),
