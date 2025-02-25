@@ -7,6 +7,7 @@ class PostCard extends StatelessWidget {
   final int likes;
   final bool isLikedByCurrentUser;
   final VoidCallback onLikePressed;
+  final VoidCallback onTap; // Novo callback para o clique no post
 
   const PostCard({
     super.key,
@@ -15,45 +16,49 @@ class PostCard extends StatelessWidget {
     required this.likes,
     required this.isLikedByCurrentUser,
     required this.onLikePressed,
+    required this.onTap, // Adicionado
   });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.all(8.0),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Nome do usuário
-            Text(
-              username,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
-            const SizedBox(height: 8),
-
-            // Mensagem do post
-            Text(message),
-            const SizedBox(height: 8),
-
-            // Botão de curtir e número de curtidas
-            Row(
-              children: [
-                IconButton(
-                  icon: Icon(
-                    isLikedByCurrentUser ? Icons.favorite : Icons.favorite_border,
-                    color: isLikedByCurrentUser ? Colors.red : null,
-                  ),
-                  onPressed: onLikePressed,
+    return InkWell(
+      onTap: onTap, // Navega para a tela de detalhes ao clicar no post
+      child: Card(
+        margin: const EdgeInsets.all(8.0),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Nome do usuário
+              Text(
+                username,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
                 ),
-                Text('$likes curtidas'),
-              ],
-            ),
-          ],
+              ),
+              const SizedBox(height: 8),
+
+              // Mensagem do post
+              Text(message),
+              const SizedBox(height: 8),
+
+              // Botão de curtir e número de curtidas
+              Row(
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      isLikedByCurrentUser ? Icons.favorite : Icons.favorite_border,
+                      color: isLikedByCurrentUser ? Colors.red : null,
+                    ),
+                    onPressed: onLikePressed,
+                  ),
+                  Text('$likes curtidas'),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
