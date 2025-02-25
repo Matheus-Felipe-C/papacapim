@@ -1,16 +1,28 @@
 import 'package:papacapim/features/auth/models/user.dart';
 import 'package:papacapim/features/feed/models/post.dart';
 
-class FeedController{
-  final List<Post> _posts = [];
-  
+class FeedController {
+  List<Post> posts = [];
 
-  List<Post> get posts => List.unmodifiable(_posts);
-
+  // Adiciona um novo post à lista
   void addPost(String message, User user) {
-    _posts.insert(0, Post(message: message, user: user));
+    posts.add(Post(
+      message: message,
+      user: user,
+    ));
+  }
+
+  // Alterna entre curtir e descurtir um post
+  void toggleLike(Post post) {
+    final postIndex = posts.indexOf(post);
+    if (postIndex != -1) {
+      if (posts[postIndex].isLikedByCurrentUser) {
+        posts[postIndex].likes--;
+        posts[postIndex].isLikedByCurrentUser = false;
+      } else {
+        posts[postIndex].likes++;
+        posts[postIndex].isLikedByCurrentUser = true;
+      }
+    }
   }
 }
-
-// Cria uma instância global do Feed Controller
-final feedController = FeedController();
