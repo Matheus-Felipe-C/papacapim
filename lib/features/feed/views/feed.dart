@@ -4,6 +4,7 @@ import 'package:papacapim/features/auth/models/user.dart';
 import 'package:papacapim/features/feed/controllers/feedController.dart';
 import 'package:papacapim/features/feed/views/newPostScreen.dart';
 import 'package:papacapim/features/feed/views/postCard.dart';
+import 'package:papacapim/features/feed/views/postDetailScreen.dart';
 
 class Feed extends StatefulWidget {
   const Feed({super.key});
@@ -41,6 +42,18 @@ class _FeedState extends State<Feed> {
               setState(() {
                 feedController.toggleLike(post);
               });
+            },
+            onTap: () {
+              // Navega para a tela de detalhes do post
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PostDetailScreen(
+                    post: post,
+                    feedController: feedController,
+                  ),
+                ),
+              );
             },
           );
         },
