@@ -7,7 +7,7 @@ class PostCard extends StatelessWidget {
   final int likes;
   final bool isLikedByCurrentUser;
   final VoidCallback onLikePressed;
-  final VoidCallback onTap; // Novo callback para o clique no post
+  final VoidCallback onTap;
 
   const PostCard({
     super.key,
@@ -16,7 +16,7 @@ class PostCard extends StatelessWidget {
     required this.likes,
     required this.isLikedByCurrentUser,
     required this.onLikePressed,
-    required this.onTap, // Adicionado
+    required this.onTap,
   });
 
   @override

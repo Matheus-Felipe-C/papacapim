@@ -24,7 +24,8 @@ class MainApp extends StatelessWidget {
         '/feed': (context) => Feed(),
         '/profile': (context) => ProfileScreen(),
       },
-      theme: ThemeData(useMaterial3: false),
+      darkTheme: AppStyles.darkModeTheme(),
+      themeMode: ThemeMode.dark,
     );
   }
 }
