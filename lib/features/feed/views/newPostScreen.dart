@@ -20,7 +20,15 @@ class _NewPostScreenState extends State<NewPostScreen> {
     @override
   Widget build(BuildContext context) {
   return Scaffold(
-    appBar: AppBar(title: const Text("New post")),
+    appBar: AppBar(
+      title: const Text("New post"),
+      actions: <Widget>[
+        ElevatedButton(
+          onPressed: () => _submitPost(context),
+          child: const Text("Postar"),
+          )
+      ],
+      ),
     body: Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -29,11 +37,6 @@ class _NewPostScreenState extends State<NewPostScreen> {
             controller: _contentController,
             decoration: AppStyles.textFieldDecoration("Escreva sua mensagem aqui"),
             maxLines: 4,
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () => _submitPost(context),
-            child: const Text("Postar"),
           ),
         ],
       ),
