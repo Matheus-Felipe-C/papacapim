@@ -54,7 +54,7 @@ class PostCard extends StatelessWidget {
                     ),
                     onPressed: onLikePressed,
                   ),
-                  Text('$likes curtidas'),
+                  Text('$likes'),
                 ],
               ),
             ],
