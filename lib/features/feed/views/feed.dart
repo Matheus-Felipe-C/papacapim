@@ -22,12 +22,14 @@ class _FeedState extends State<Feed> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Feed"),
-        leading: IconButton(
-          icon: const Icon(Icons.person),
-          onPressed: () {
-            Navigator.pushNamed(context, '/profile');
-          },
-        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.person),
+            onPressed: () {
+              Navigator.pushNamed(context, '/profile');
+            },
+          ),
+        ],
       ),
       body: ListView.builder(
         itemCount: feedController.posts.length,
