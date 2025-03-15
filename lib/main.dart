@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:papacapim/features/auth/views/login.dart';
+import 'package:papacapim/features/auth/views/profile_screen.dart';
 import 'package:papacapim/features/auth/views/signup.dart';
 import 'package:papacapim/features/feed/views/feed.dart';
 import 'package:papacapim/features/auth/views/edit_profile_screen.dart';
@@ -23,6 +24,7 @@ class MainApp extends StatelessWidget {
         '/signup': (context) => SignupPage(),
         '/feed': (context) => Feed(),
         '/profile': (context) => ProfileScreen(),
+        '/edit_profile': (context) => EditProfileScreen(),
       },
       darkTheme: AppStyles.darkModeTheme(),
       themeMode: ThemeMode.dark,

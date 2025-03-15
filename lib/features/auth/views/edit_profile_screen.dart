@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:papacapim/features/auth/controllers/authController.dart';
 import '../controllers/profile_controller.dart';
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+class EditProfileScreen extends StatefulWidget {
+  const EditProfileScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<EditProfileScreen> createState() => _EditProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _EditProfileScreenState extends State<EditProfileScreen> {
   late ProfileController _controller;
   final _nameController = TextEditingController();
   final _usernameController = TextEditingController();
