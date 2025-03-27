@@ -17,7 +17,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final profileController = ProfileController();
-    final feedController = FeedController();
+    feedController;
     final User user = profileController.getCurrentUser();
 
     return Scaffold(

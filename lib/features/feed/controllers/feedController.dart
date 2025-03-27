@@ -26,3 +26,5 @@ class FeedController {
     }
   }
 }
+
+final feedController = FeedController();

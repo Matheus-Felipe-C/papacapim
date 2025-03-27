@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:papacapim/features/auth/controllers/authController.dart';
-import 'package:papacapim/features/auth/models/user.dart';
 import 'package:papacapim/features/feed/controllers/feedController.dart';
 import 'package:papacapim/features/feed/views/newPostScreen.dart';
 import 'package:papacapim/features/feed/views/postCard.dart';
