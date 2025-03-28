@@ -7,11 +7,11 @@ class ApiService {
   final String baseUrl = "https://api.papacapim.just.pro.br";
 
   // Cria um usuário
-  Future<User> createUser(String name, String username) async{
+  Future<User> createUser(String login, String name, String password, String passwordConfirm) async{
     final response = await http.post(
       Uri.parse("$baseUrl/users"),
       headers: {"Content-Type": "application/json"},
-      body: jsonEncode({"name": name, "login": username})
+      body: jsonEncode({"name": name, "login": login, "password": password, "password_confirmation": passwordConfirm})
     );
 
     if (response.statusCode == 201) {

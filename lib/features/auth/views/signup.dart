@@ -16,14 +16,14 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
 
-  void _signup() {
+  Future<void> _signup() async {
     String name = _nameController.text;
     String username = _usernameController.text;
     String password = _passwordController.text;
     String confirmPassword = _confirmPasswordController.text;
 
     bool success =
-        AuthController().createUser(name, username, password, confirmPassword);
+        await AuthController().createUser(name, username, password, confirmPassword);
 
     if (success) {
       print("User registered!");
