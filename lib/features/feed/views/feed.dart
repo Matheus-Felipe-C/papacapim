@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:papacapim/features/auth/controllers/authController.dart';
+import 'package:papacapim/features/auth/models/user.dart';
 import 'package:papacapim/features/feed/controllers/feedController.dart';
 import 'package:papacapim/features/feed/views/newPostScreen.dart';
 import 'package:papacapim/features/feed/views/postCard.dart';
@@ -15,6 +16,7 @@ class Feed extends StatefulWidget {
 class _FeedState extends State<Feed> {
   final FeedController feedController = FeedController();
   final AuthController authController = AuthController();
+  final User user = User(id: 1, name: 'test', username: 'testprofile');
 
   @override
   Widget build(BuildContext context) {
@@ -66,12 +68,12 @@ class _FeedState extends State<Feed> {
             MaterialPageRoute(builder: (context) => const NewPostScreen()),
           );
 
-          if (newPost != null && authController.currentUser != null) {
+          if (newPost != null && user != null) {
             setState(() {
               feedController.addPost(
-                  newPost["message"], authController.currentUser!);
+                  newPost["message"], user!);
             });
-          } else if (authController.currentUser == null) {
+          } else if (user == null) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                   content: Text(

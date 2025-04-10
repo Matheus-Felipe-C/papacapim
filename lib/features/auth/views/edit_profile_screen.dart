@@ -20,17 +20,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _controller = ProfileController();
 
     // Initialize text fields with current user data
-    _nameController.text = authController.currentUser!.name;
-    _usernameController.text = authController.currentUser!.username;
+    _nameController.text = 'testing';
+    _usernameController.text = 'testprofile';
   }
 
   void _saveChanges() {
-    setState(() {
-      _controller.updateProfile(
-        name: _nameController.text,
-        username: _usernameController.text,
-      );
-    });
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text("Perfil atualizado!")),

@@ -18,7 +18,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     final profileController = ProfileController();
     feedController;
-    final User user = profileController.getCurrentUser();
+    final User user = User(id: 1, name: 'test', username: 'testprofile');
 
     return Scaffold(
       appBar: AppBar(
