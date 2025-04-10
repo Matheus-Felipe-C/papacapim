@@ -14,6 +14,15 @@ class Session {
       required this.createdAt,
       required this.updatedAt});
 
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'user_login': userLogin,
+    'token': token,
+    'ip': ip,
+    'created_at': createdAt,
+    'updated_at': updatedAt,
+  };
+
   factory Session.fromJson(Map<String, dynamic> json) {
     return Session(
       id: json['id'],
