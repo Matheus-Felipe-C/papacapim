@@ -13,22 +13,11 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  // TODO refazer a lógica de Login
   void _login() {
     String username = _usernameController.text;
     String password = _usernameController.text;
 
-    bool isValid = AuthController().validateCredentials(username, password);
-
-    if (isValid) {
-      print("Login feito com sucesso!");
-      Navigator.pushNamedAndRemoveUntil(
-          context,
-          '/feed',
-          (route) =>
-              false); // Redireciona para o feed e remove todos os itens da stack
-    } else {
-      print('Credenciais inválidas');
-    }
   }
 
   @override
