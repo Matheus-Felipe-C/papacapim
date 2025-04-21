@@ -5,22 +5,26 @@ import 'package:papacapim/features/auth/models/user.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  final String baseUrl = "https://api.papacapim.just.pro.br";
+  final String baseUrl = "api.papacapim.just.pro.br";
 
   // Cria um usuário
   Future<User> createUser(String login, String name, String password,
       String passwordConfirm) async {
-    final response = await http.post(Uri.parse("$baseUrl/users"),
+    final response = await http.post(Uri.https(baseUrl, "/users"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
-          "name": name,
-          "login": login,
-          "password": password,
-          "password_confirmation": passwordConfirm
+          "user": {
+            "login": login,
+            "name": name,
+            "password": password,
+            "password_confirmation": passwordConfirm
+          }
         }));
 
     if (response.statusCode == 201) {
-      return User.fromJson(jsonDecode(response.body));
+      final data = jsonDecode(response.body);
+      print('Usuário: ${data['login']}');
+      return User.fromJson(data);
     } else {
       throw Exception("Falha ao criar usuário");
     }
@@ -52,22 +56,24 @@ class ApiService {
       String? name,
       String? password,
       String? passwordConfirmation}) async {
-    final session = ""; //Sessão só pra evitar erros no código em si, tenho que mudar dps
+    final session =
+        ""; //Sessão só pra evitar erros no código em si, tenho que mudar dps
 
     final Map<String, dynamic> body = {};
 
     if (login != null) body['login'] = login;
     if (name != null) body['name'] = name;
     if (password != null) body['password'] = password;
-    if (passwordConfirmation != null) body['password_confirmation'] = passwordConfirmation;
+    if (passwordConfirmation != null)
+      body['password_confirmation'] = passwordConfirmation;
 
     final response = await http.patch(Uri.parse("$baseUrl/users/$userID"),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $session",
-        }, body: jsonEncode(body)
-      );
-    
+        },
+        body: jsonEncode(body));
+
     if (response.statusCode == 201) {
       return User.fromJson(jsonDecode(response.body));
     } else {

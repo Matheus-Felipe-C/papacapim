@@ -22,18 +22,21 @@ class _SignupPageState extends State<SignupPage> {
     String password = _passwordController.text;
     String confirmPassword = _confirmPasswordController.text;
 
+    print("password: $password");
+    print("confirm passsword: $confirmPassword");
+
+    try {
     bool success =
         await AuthController().createUser(name, username, password, confirmPassword);
-
-    if (success) {
-      print("User registered!");
-      Navigator.pushNamedAndRemoveUntil(
-          context,
-          '/feed',
-          (route) =>
-              false); // Redireciona para o feed e remove todos os itens da stack
-    } else {
-      print("Passwords do not match!");
+        
+      // print("User registered!");
+      // Navigator.pushNamedAndRemoveUntil(
+      //     context,
+      //     '/feed',
+      //     (route) =>
+      //         false); // Redireciona para o feed e remove todos os itens da stack
+    } catch (e) {
+      print(e);
     }
   }
 
