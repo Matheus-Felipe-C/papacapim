@@ -293,4 +293,20 @@ class ApiService {
       throw new Exception("Erro ao pegar as respostas: ${response.statusCode}");
     }
   }
+
+  Future<void> deletePost(String token, String postId) async {
+    final response = await http.delete(
+      Uri.https(baseUrl, "/posts/$postId"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
+    
+    if (response.statusCode == 204) {
+      print("Post removido com sucesso");
+    } else {
+      throw Exception("Erro ao apagar post: ${response.statusCode}");
+    }
+  }
 }
