@@ -240,7 +240,7 @@ class ApiService {
     if (response.statusCode == 204) {
       print("Usuário unfollowed!");
       final data = jsonDecode(response.body);
-      
+            
     } else {
       throw Exception("Erro ao dar unfollow em usuário: ${response.statusCode}");
     }
