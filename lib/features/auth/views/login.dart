@@ -14,7 +14,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
 
   // TODO refazer a lógica de Login
-  void _login() {
+  void _login() { 
     String username = _usernameController.text;
     String password = _usernameController.text;
 
