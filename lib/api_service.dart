@@ -32,7 +32,7 @@ class ApiService {
 
   /// Cria uma nova sessão a partir da API
   Future<Session> createSession(String login, String password) async {
-    final response = await http.post(Uri.parse("$baseUrl/sessions"),
+    final response = await http.post(Uri.https(baseUrl, "/sessions"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({"login": login, "password": password}));
 
@@ -45,9 +45,9 @@ class ApiService {
 
   /// Apaga uma sessão existente
   /// P.S - Preciso pesquisar
-  Future<void> deleteSession() async {
+  Future<void> deleteSession(String id) async {
     final response = await http.delete(
-      Uri.parse("$baseUrl/sessions/1"),
+      Uri.https(baseUrl, "/sessions/$id"),
     );
   }
 
@@ -76,7 +76,7 @@ class ApiService {
       body['password_confirmation'] = passwordConfirmation;
     }
 
-    final response = await http.patch(Uri.parse("$baseUrl/users/$userID"),
+    final response = await http.patch(Uri.https(baseUrl, "/users"),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $session",
