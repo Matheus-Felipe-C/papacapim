@@ -230,7 +230,7 @@ class ApiService {
         "Authorization": "Bearer $token",
       },
       body: jsonEncode({
-        "post": {
+        "reply": {
           "message": message,
         }
       }),
