@@ -217,4 +217,24 @@ class ApiService {
       throw Exception("Erro ao dar unfollow em usuário: ${response.statusCode}");
     }
   }
+
+  Future<void> replyPost(String token, String postId, String message) async {
+    final response = await http.delete(Uri.https(baseUrl, "/posts/$postId/replies"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+      body: jsonEncode({
+        "post": {
+          "message": message,
+        }
+      }),
+    );
+
+    if (response.statusCode == 204) {
+      print("Usuário unfollowed!");
+    } else {
+      throw Exception("Erro ao dar unfollow em usuário: ${response.statusCode}");
+    }
+  }
 }
