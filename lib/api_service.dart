@@ -309,4 +309,19 @@ class ApiService {
       throw Exception("Erro ao apagar post: ${response.statusCode}");
     }
   }
+
+  Future<void> likePost(String token, String postId) async {
+    final response = await http.post(Uri.https(baseUrl, "/posts/$postId/likes"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
+
+    if (response.statusCode == 201) {
+      print("Post curtido!");
+    } else {
+      throw Exception("Erro ao curtir post: ${response.body}");
+    }
+  }
 }
