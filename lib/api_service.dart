@@ -187,4 +187,19 @@ class ApiService {
       throw Exception("Erro ao mostrar lista de seguidores: ${response.statusCode}");
     }
   }
+
+  Future<void> deletefollow(String token, String login, String id) async {
+    final response = await http.delete(Uri.https(baseUrl, "/users/$login/followers/$id"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      }
+    );
+
+    if (response.statusCode == 204) {
+      print("Usuário unfollowed!");
+    } else {
+      throw Exception("Erro ao dar unfollow em usuário: ${response.statusCode}");
+    }
+  }
 }
