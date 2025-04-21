@@ -141,4 +141,19 @@ class ApiService {
       throw Exception("Falha ao obter dados de $login: ${response.statusCode}");
     }
   }
+
+  Future<void> deleteUser(String token, String id) async {
+    final response = await http.delete(Uri.https(baseUrl, "/users/$id"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      }
+    );
+
+    if (response.statusCode == 204) {
+      print("Usuário apagado com sucesso!");
+    } else {
+      throw Exception("Erro ao apagar o usuário: ${response.statusCode}");
+    }
+  }
 }
