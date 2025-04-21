@@ -324,4 +324,19 @@ class ApiService {
       throw Exception("Erro ao curtir post: ${response.body}");
     }
   }
+
+  Future<void> removeLike(String token, String postId) async {
+    final response = await http.delete(Uri.https(baseUrl, "/posts/$postId/likes/1"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
+
+    if (response.statusCode == 201) {
+      print("Post curtido!");
+    } else {
+      throw Exception("Erro ao curtir post: ${response.body}");
+    }
+  }
 }
