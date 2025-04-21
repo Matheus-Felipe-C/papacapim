@@ -67,11 +67,11 @@ class ApiService {
       String? name,
       String? password,
       String? passwordConfirmation}) async {
-
     final Map<String, dynamic> body = {};
 
     final hasPassword = password != null && password.isNotEmpty;
-    final hasConfirmation = passwordConfirmation != null && passwordConfirmation.isNotEmpty;
+    final hasConfirmation =
+        passwordConfirmation != null && passwordConfirmation.isNotEmpty;
 
     if (login != null) body['login'] = login;
     if (name != null) body['name'] = name;
@@ -99,25 +99,20 @@ class ApiService {
     }
   }
 
-  Future<List<User>> getUserList({
-    required String token,
-    int? page,
-    String? search
-  }) async {
+  Future<List<User>> getUserList(
+      {required String token, int? page, String? search}) async {
     final queryParameters = <String, String>{};
-    
+
     if (page != null) queryParameters['page'] = page.toString();
     if (search != null) queryParameters['search'] = search.toString();
 
-    final uri = Uri.parse("$baseUrl/users").replace(queryParameters: queryParameters);
+    final uri =
+        Uri.parse("$baseUrl/users").replace(queryParameters: queryParameters);
 
-    final response = await http.get(
-      uri,
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
-      }
-    );
+    final response = await http.get(uri, headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $token",
+    });
 
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
@@ -128,12 +123,11 @@ class ApiService {
   }
 
   Future<User> getUser(String token, String login) async {
-    final response = await http.get(Uri.https(baseUrl, "/users/$login"),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
-      }
-    );
+    final response =
+        await http.get(Uri.https(baseUrl, "/users/$login"), headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $token",
+    });
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -144,12 +138,11 @@ class ApiService {
   }
 
   Future<void> deleteUser(String token, String id) async {
-    final response = await http.delete(Uri.https(baseUrl, "/users/$id"),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
-      }
-    );
+    final response =
+        await http.delete(Uri.https(baseUrl, "/users/$id"), headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $token",
+    });
 
     if (response.statusCode == 204) {
       print("Usuário apagado com sucesso!");
@@ -159,7 +152,8 @@ class ApiService {
   }
 
   Future<void> followUser(String token, String login) async {
-    final response = await http.post(Uri.https(baseUrl, "/users/$login/followers"),
+    final response = await http.post(
+      Uri.https(baseUrl, "/users/$login/followers"),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -174,58 +168,57 @@ class ApiService {
   }
 
   Future<List<User>> listFollowers(String token, String login) async {
-    final response = await http.get(Uri.https(baseUrl, "/users/$login/followers"),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
-      }
-    );
+    final response =
+        await http.get(Uri.https(baseUrl, "/users/$login/followers"), headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $token",
+    });
 
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
       return data.map((json) => User.fromJson(json)).toList();
     } else {
-      throw Exception("Erro ao mostrar lista de seguidores: ${response.statusCode}");
+      throw Exception(
+          "Erro ao mostrar lista de seguidores: ${response.statusCode}");
     }
   }
 
   Future<void> deletefollow(String token, String login, String id) async {
-    final response = await http.delete(Uri.https(baseUrl, "/users/$login/followers/$id"),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
-      }
-    );
+    final response = await http
+        .delete(Uri.https(baseUrl, "/users/$login/followers/$id"), headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $token",
+    });
 
     if (response.statusCode == 204) {
       print("Usuário unfollowed!");
     } else {
-      throw Exception("Erro ao dar unfollow em usuário: ${response.statusCode}");
+      throw Exception(
+          "Erro ao dar unfollow em usuário: ${response.statusCode}");
     }
   }
 
   Future<void> createPost(String token, String message) async {
-    final response = await http.post(Uri.https(baseUrl, "/posts"),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
-      },
-      body: {
-        "post": {
-          "message": message,
-        }
+    final response = await http.post(Uri.https(baseUrl, "/posts"), headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $token",
+    }, body: {
+      "post": {
+        "message": message,
       }
-    );
+    });
 
     if (response.statusCode == 201) {
       print("Post criado");
     } else {
-      throw Exception("Erro ao dar unfollow em usuário: ${response.statusCode}");
+      throw Exception(
+          "Erro ao dar unfollow em usuário: ${response.statusCode}");
     }
   }
 
   Future<Post> replyPost(String token, String postId, String message) async {
-    final response = await http.delete(Uri.https(baseUrl, "/posts/$postId/replies"),
+    final response = await http.delete(
+      Uri.https(baseUrl, "/posts/$postId/replies"),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -240,9 +233,28 @@ class ApiService {
     if (response.statusCode == 204) {
       print("Usuário unfollowed!");
       final data = jsonDecode(response.body);
-      return Post.fromJson(data);      
+      return Post.fromJson(data);
     } else {
-      throw Exception("Erro ao dar unfollow em usuário: ${response.statusCode}");
+      throw Exception(
+          "Erro ao dar unfollow em usuário: ${response.statusCode}");
+    }
+  }
+
+  Future<List<Post>> listPosts(
+      {required String token, int? page, int? feed, String? search}) async {
+    final response = await http.get(
+      Uri.https(baseUrl, "/posts"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
+    
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      return data.map((json) => Post.fromJson(json)).toList();
+    } else {
+      throw Exception("Erro ao pegar os posts: ${response.statusCode}");
     }
   }
 }
