@@ -275,4 +275,22 @@ class ApiService {
       throw Exception("Erro ao pegar os posts: ${response.statusCode}");
     }
   }
+
+  Future<List<Post>> listReplies(
+      {required String token, required String postId, String? page}) async {
+    final response = await http.get(
+      Uri.https(baseUrl, "/posts/$postId/replies"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
+    
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      return data.map((json) => Post.fromJson(json)).toList();
+    } else {
+      throw new Exception("Erro ao pegar as respostas: ${response.statusCode}");
+    }
+  }
 }
