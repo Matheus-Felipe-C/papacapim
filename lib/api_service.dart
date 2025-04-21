@@ -45,10 +45,20 @@ class ApiService {
 
   /// Apaga uma sessão existente
   /// P.S - Preciso pesquisar
-  Future<void> deleteSession(String id) async {
+  Future<void> deleteSession(String id, String token) async {
     final response = await http.delete(
       Uri.https(baseUrl, "/sessions/$id"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
     );
+
+    if (response.statusCode == 204) {
+      print("Sessão encerrada com sucesso");
+    } else {
+      throw Exception("Erro ao encerrar a sessão: ${response.statusCode}");
+    }
   }
 
   Future<User> updateUser(String token, String userID,
