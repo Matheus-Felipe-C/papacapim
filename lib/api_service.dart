@@ -202,4 +202,19 @@ class ApiService {
       throw Exception("Erro ao dar unfollow em usuário: ${response.statusCode}");
     }
   }
+
+  Future<void> createPost(String token, String message) async {
+    final response = await http.post(Uri.https(baseUrl, "/posts"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      }
+    );
+
+    if (response.statusCode == 201) {
+      print("Post criado");
+    } else {
+      throw Exception("Erro ao dar unfollow em usuário: ${response.statusCode}");
+    }
+  }
 }
