@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:papacapim/features/auth/models/session.dart';
 import 'package:papacapim/features/auth/models/user.dart';
 import 'package:http/http.dart' as http;
+import 'package:papacapim/features/feed/models/post.dart';
 
 class ApiService {
   final String baseUrl = "api.papacapim.just.pro.br";
@@ -223,7 +224,7 @@ class ApiService {
     }
   }
 
-  Future<void> replyPost(String token, String postId, String message) async {
+  Future<Post> replyPost(String token, String postId, String message) async {
     final response = await http.delete(Uri.https(baseUrl, "/posts/$postId/replies"),
       headers: {
         "Content-Type": "application/json",
@@ -238,6 +239,8 @@ class ApiService {
 
     if (response.statusCode == 204) {
       print("Usuário unfollowed!");
+      final data = jsonDecode(response.body);
+      
     } else {
       throw Exception("Erro ao dar unfollow em usuário: ${response.statusCode}");
     }
