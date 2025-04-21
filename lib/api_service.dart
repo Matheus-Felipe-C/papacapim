@@ -156,4 +156,19 @@ class ApiService {
       throw Exception("Erro ao apagar o usuário: ${response.statusCode}");
     }
   }
+
+  Future<void> followUser(String token, String login) async {
+    final response = await http.post(Uri.https(baseUrl, "/users/$login/followers"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
+
+    if (response.statusCode == 201) {
+      print("Usuário seguido!");
+    } else {
+      throw Exception("Erro ao seguir usuário: ${response.statusCode}");
+    }
+  }
 }
