@@ -208,6 +208,11 @@ class ApiService {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
+      },
+      body: {
+        "post": {
+          "message": message,
+        }
       }
     );
 
