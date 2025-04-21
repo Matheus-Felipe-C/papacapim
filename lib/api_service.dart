@@ -98,7 +98,7 @@ class ApiService {
     }
   }
 
-  Future<List<User>> getUsers({
+  Future<List<User>> getUserList({
     required String token,
     int? page,
     String? search
