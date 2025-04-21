@@ -97,4 +97,32 @@ class ApiService {
       throw Exception("Algo deu errado ao realizar as alterações");
     }
   }
+
+  Future<List<User>> getUsers({
+    required String token,
+    int? page,
+    String? search
+  }) async {
+    final queryParameters = <String, String>{};
+    
+    if (page != null) queryParameters['page'] = page.toString();
+    if (search != null) queryParameters['search'] = search.toString();
+
+    final uri = Uri.parse("$baseUrl/users").replace(queryParameters: queryParameters);
+
+    final response = await http.get(
+      uri,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      }
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      return data.map((json) => User.fromJson(json)).toList();
+    } else {
+      throw Exception("Falha ao obter usuários: ${response.statusCode}");
+    }
+  }
 }
