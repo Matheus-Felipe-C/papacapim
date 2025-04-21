@@ -125,4 +125,20 @@ class ApiService {
       throw Exception("Falha ao obter usuários: ${response.statusCode}");
     }
   }
+
+  Future<User> getUser(String token, String login) async {
+    final response = await http.get(Uri.https(baseUrl, "/users/$login"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      }
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return User.fromJson(data);
+    } else {
+      throw Exception("Falha ao obter dados de $login: ${response.statusCode}");
+    }
+  }
 }
