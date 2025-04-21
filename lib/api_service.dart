@@ -61,11 +61,20 @@ class ApiService {
 
     final Map<String, dynamic> body = {};
 
+    final hasPassword = password != null && password.isNotEmpty;
+    final hasConfirmation = passwordConfirmation != null && passwordConfirmation.isNotEmpty;
+
     if (login != null) body['login'] = login;
     if (name != null) body['name'] = name;
-    if (password != null) body['password'] = password;
-    if (passwordConfirmation != null)
+
+    if (hasPassword || hasConfirmation) {
+      if (password != passwordConfirmation) {
+        throw Exception("As senhas não coincidem");
+      }
+
+      body['password'] = password;
       body['password_confirmation'] = passwordConfirmation;
+    }
 
     final response = await http.patch(Uri.parse("$baseUrl/users/$userID"),
         headers: {
@@ -74,7 +83,7 @@ class ApiService {
         },
         body: jsonEncode(body));
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200 || response.statusCode == 204) {
       return User.fromJson(jsonDecode(response.body));
     } else {
       throw Exception("Algo deu errado ao realizar as alterações");
