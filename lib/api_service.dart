@@ -51,13 +51,11 @@ class ApiService {
     );
   }
 
-  Future<User> updateUser(String userID,
+  Future<User> updateUser(String token, String userID,
       {String? login,
       String? name,
       String? password,
       String? passwordConfirmation}) async {
-    final session =
-        ""; //Sessão só pra evitar erros no código em si, tenho que mudar dps
 
     final Map<String, dynamic> body = {};
 
@@ -79,7 +77,7 @@ class ApiService {
     final response = await http.patch(Uri.https(baseUrl, "/users"),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer $session",
+          "Authorization": "Bearer $token",
         },
         body: jsonEncode(body));
 
