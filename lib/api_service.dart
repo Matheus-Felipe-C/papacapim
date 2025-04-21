@@ -171,4 +171,20 @@ class ApiService {
       throw Exception("Erro ao seguir usuário: ${response.statusCode}");
     }
   }
+
+  Future<List<User>> listFollowers(String token, String login) async {
+    final response = await http.get(Uri.https(baseUrl, "/users/$login/followers"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      }
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      return data.map((json) => User.fromJson(json)).toList();
+    } else {
+      throw Exception("Erro ao mostrar lista de seguidores: ${response.statusCode}");
+    }
+  }
 }
