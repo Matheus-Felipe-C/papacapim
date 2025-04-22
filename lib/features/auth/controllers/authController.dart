@@ -71,10 +71,15 @@ class AuthController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<User> getUser(String login) async {
+    return await ApiService().getUser(token!, login);
+  }
+
   Future<void> deleteUser() async {
-    final user = await ApiService().getUser(token!, _session!.userLogin);
+    final user = await getUser(_session!.userLogin);
     await ApiService().deleteUser(token!, user.id as String);
   }
+
 
   /// Salva a sessão
   Future<void> saveSessionToPrefs(Session session) async {
