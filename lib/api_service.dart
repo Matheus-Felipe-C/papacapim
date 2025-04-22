@@ -310,29 +310,33 @@ class ApiService {
     }
   }
 
-  Future<void> likePost(String token, String postId) async {
-    final response = await http.post(Uri.https(baseUrl, "/posts/$postId/likes"),
+  Future<bool> likePost(String token, String postId) async {
+  try {
+    final response = await http.post(
+      Uri.https(baseUrl, "/posts/$postId/likes"),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
       },
     );
 
-    if (response.statusCode == 201) {
-      print("Post curtido!");
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return true;
     } else {
       throw Exception("Erro ao curtir post: ${response.body}");
     }
   }
 
-  Future<void> removeLike(String token, String postId) async {
-    final response = await http.delete(Uri.https(baseUrl, "/posts/$postId/likes/1"),
+Future<bool> removeLike(String token, String postId) async {
+  try {
+    final response = await http.delete(
+      Uri.https(baseUrl, "/posts/$postId/likes"),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
       },
     );
-
+    
     if (response.statusCode == 201) {
       print("Post curtido!");
     } else {
