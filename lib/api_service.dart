@@ -198,7 +198,7 @@ class ApiService {
     }
   }
 
-  Future<void> createPost(String token, String message) async {
+  Future<Post> createPost(String token, String message) async {
     final response = await http.post(Uri.https(baseUrl, "/posts"), headers: {
       "Content-Type": "application/json",
       "Authorization": "Bearer $token",
