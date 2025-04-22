@@ -7,8 +7,10 @@ import 'package:papacapim/features/auth/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthController extends ChangeNotifier{
-  List<User> users = [];
-  static const _userKey = 'user_data';
+  Session? _session;
+
+  Session? get session => _session;
+  String? get token => _session?.token;
 
   /// Cria um novo usuário e sessão a partir da API
   Future<bool> createUser(String name, String username, String password, String passwordConfirm) async {
@@ -29,7 +31,7 @@ class AuthController extends ChangeNotifier{
   Future<void> saveSessionToPrefs(Session session) async {
     final prefs = await SharedPreferences.getInstance();
     String userJson = jsonEncode(session.toJson());
-    await prefs.setString(_userKey, userJson);
+    await prefs.setString('session', userJson);
   }
 }
   
