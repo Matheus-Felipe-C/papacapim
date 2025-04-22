@@ -6,9 +6,11 @@ import 'package:papacapim/features/auth/models/session.dart';
 import '../models/user.dart';
 
 class ProfileController extends ChangeNotifier{
-  Session? _session;
+  final AuthController authController;
 
-  Session? get session => AuthController().session;
+  ProfileController({required this.authController});
+
+  Session? get session => authController.session;
   
 
   Future<User> getUser(String login) async {
@@ -16,7 +18,7 @@ class ProfileController extends ChangeNotifier{
   }
 
   Future<void> deleteUser() async {
-    final user = await getUser(_session!.userLogin);
+    final user = await getUser(session!.userLogin);
     await ApiService().deleteUser(session!.token, user.id as String);
   }
 

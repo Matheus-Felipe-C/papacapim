@@ -1,3 +1,4 @@
+import 'package:papacapim/api_service.dart';
 import 'package:papacapim/features/auth/models/user.dart';
 import 'package:papacapim/features/feed/models/post.dart';
 
@@ -6,10 +7,7 @@ class FeedController {
 
   // Adiciona um novo post à lista
   void addPost(String message, User user) {
-    posts.add(Post(
-      message: message,
-      user: user,
-    ));
+    Post post = await ApiService().createPost(token, message);
   }
 
   // Alterna entre curtir e descurtir um post
