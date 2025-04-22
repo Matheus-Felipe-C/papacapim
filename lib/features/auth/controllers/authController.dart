@@ -71,20 +71,6 @@ class AuthController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<User> getUser(String login) async {
-    return await ApiService().getUser(token!, login);
-  }
-
-  Future<void> deleteUser() async {
-    final user = await getUser(_session!.userLogin);
-    await ApiService().deleteUser(token!, user.id as String);
-  }
-
-  Future<List<User>> getUserList({int? page, String? search}) async {
-    final users = await ApiService().getUserList(token: token!, page: page, search: search);
-    return users;
-  }
-
 
   /// Salva a sessão
   Future<void> saveSessionToPrefs(Session session) async {
