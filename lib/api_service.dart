@@ -209,36 +209,36 @@ class ApiService {
     });
 
     if (response.statusCode == 201) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      return Post.fromJson(responseData["post"]);
       print("Post criado");
     } else {
       throw Exception(
-          "Erro ao dar unfollow em usuário: ${response.statusCode}");
+          "Erro ao criar post: ${response.statusCode}");
     }
   }
 
   Future<Post> replyPost(String token, String postId, String message) async {
-    final response = await http.delete(
-      Uri.https(baseUrl, "/posts/$postId/replies"),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
-      },
-      body: jsonEncode({
-        "reply": {
-          "message": message,
-        }
-      }),
-    );
+  final response = await http.post(
+    Uri.https(baseUrl, "/posts/$postId/replies"),
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $token",
+    },
+    body: {
+      "reply": {
+        "message": message,
+      }
+    },
+  );
 
-    if (response.statusCode == 204) {
-      print("Usuário unfollowed!");
-      final data = jsonDecode(response.body);
-      return Post.fromJson(data);
-    } else {
-      throw Exception(
-          "Erro ao dar unfollow em usuário: ${response.statusCode}");
-    }
+  if (response.statusCode == 201) {
+    final Map<String, dynamic> responseData = jsonDecode(response.body);
+    return Post.fromJson(responseData["reply"]);
+  } else {
+    throw Exception("Erro ao responder post: ${response.statusCode}");
   }
+}
 
   Future<List<Post>> listPosts(
       {required String token, int? page, int? feed, String? search}) async {
