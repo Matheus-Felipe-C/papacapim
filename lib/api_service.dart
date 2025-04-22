@@ -290,7 +290,7 @@ class ApiService {
       final List<dynamic> data = jsonDecode(response.body);
       return data.map((json) => Post.fromJson(json)).toList();
     } else {
-      throw new Exception("Erro ao pegar as respostas: ${response.statusCode}");
+      throw Exception("Erro ao pegar as respostas: ${response.statusCode}");
     }
   }
 
