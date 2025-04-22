@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:papacapim/features/auth/models/user.dart';
 import 'package:papacapim/features/feed/models/post.dart';
 import 'package:papacapim/features/feed/controllers/feedController.dart';
 
@@ -14,6 +15,7 @@ class PostDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final User user = User(id: 1, username: 'testing', name: 'testing');
     return Scaffold(
       appBar: AppBar(
         title: const Text("Detalhes do Post"),
@@ -25,7 +27,7 @@ class PostDetailScreen extends StatelessWidget {
           children: [
             // Nome do usuário
             Text(
-              post.user.username,
+              user.username,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,

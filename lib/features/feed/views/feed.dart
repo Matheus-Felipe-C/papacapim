@@ -38,7 +38,7 @@ class _FeedState extends State<Feed> {
           final post = feedController.posts[index];
           return PostCard(
             message: post.message,
-            username: post.user.username,
+            username: user.username,
             likes: post.likes,
             isLikedByCurrentUser: post.isLikedByCurrentUser,
             onLikePressed: () {
