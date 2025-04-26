@@ -16,7 +16,7 @@ class Feed extends StatefulWidget {
 class _FeedState extends State<Feed> {
   final FeedController feedController = FeedController();
   final AuthController authController = AuthController();
-  final user = User(id: '1', name: 'testing', username: 'testing');
+  final user = User(id: 1, name: 'testing', username: 'testing');
 
   @override
   Widget build(BuildContext context) {

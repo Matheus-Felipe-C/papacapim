@@ -39,7 +39,7 @@ class AuthController extends ChangeNotifier {
   }
 
   Future<void> updateUser(
-    String userId,
+    int userId,
     String? login,
     String? name,
     String? password,

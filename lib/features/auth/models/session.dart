@@ -1,5 +1,5 @@
 class Session {
-  String id;
+  int id;
   String userLogin;
   String token;
   String ip;

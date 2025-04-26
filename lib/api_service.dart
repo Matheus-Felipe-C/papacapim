@@ -87,7 +87,7 @@ class ApiService {
     }
   }
 
-  Future<User> updateUser(String token, String userID,
+  Future<User> updateUser(String token, int userID,
       {String? login,
       String? name,
       String? password,
@@ -162,7 +162,7 @@ class ApiService {
     }
   }
 
-  Future<void> deleteUser(String token, String id) async {
+  Future<void> deleteUser(String token, int id) async {
     final response =
         await http.delete(Uri.https(baseUrl, "/users/$id"), headers: {
       "Content-Type": "application/json",
