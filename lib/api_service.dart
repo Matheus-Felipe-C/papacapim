@@ -9,25 +9,39 @@ class ApiService {
   final String baseUrl = "api.papacapim.just.pro.br";
 
   // Cria um usuário
-  Future<User> createUser(String login, String name, String password,
-      String passwordConfirm) async {
-    final response = await http.post(Uri.https(baseUrl, "/users"),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode({
-          "user": {
-            "login": login,
-            "name": name,
-            "password": password,
-            "password_confirmation": passwordConfirm
-          }
-        }));
+  Future<User> createUser(
+      {required String login,
+      required String name,
+      required String password,
+      required String passwordConfirm}) async {
+    print(jsonEncode({
+      "user": {
+        "login": login,
+        "name": name,
+        "password": password,
+        "password_confirmation": passwordConfirm
+      }
+    }));
+
+    final response = await http.post(
+      Uri.https(baseUrl, "/users"),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({
+        "user": {
+          "login": login,
+          "name": name,
+          "password": password,
+          "password_confirmation": passwordConfirm
+        }
+      }),
+    );
 
     if (response.statusCode == 201) {
       final data = jsonDecode(response.body);
       print('Usuário: ${data['login']}');
       return User.fromJson(data);
     } else {
-      throw Exception("Falha ao criar usuário");
+      throw Exception("Falha ao criar usuário. Código: ${response.body}");
     }
   }
 

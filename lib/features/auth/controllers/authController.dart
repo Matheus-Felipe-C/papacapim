@@ -29,7 +29,7 @@ class AuthController extends ChangeNotifier {
     }
 
     User newUser =
-        await ApiService().createUser(username, name, password, password);
+        await ApiService().createUser(login: username, name: name, password: password, passwordConfirm: passwordConfirm);
     Session newSession = await ApiService().createSession(username, password);
     print(newUser);
     print(newSession);
