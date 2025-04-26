@@ -213,32 +213,31 @@ class ApiService {
       return Post.fromJson(responseData["post"]);
       print("Post criado");
     } else {
-      throw Exception(
-          "Erro ao criar post: ${response.statusCode}");
+      throw Exception("Erro ao criar post: ${response.statusCode}");
     }
   }
 
   Future<Post> replyPost(String token, String postId, String message) async {
-  final response = await http.post(
-    Uri.https(baseUrl, "/posts/$postId/replies"),
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $token",
-    },
-    body: {
-      "reply": {
-        "message": message,
-      }
-    },
-  );
+    final response = await http.post(
+      Uri.https(baseUrl, "/posts/$postId/replies"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+      body: {
+        "reply": {
+          "message": message,
+        }
+      },
+    );
 
-  if (response.statusCode == 201) {
-    final Map<String, dynamic> responseData = jsonDecode(response.body);
-    return Post.fromJson(responseData["reply"]);
-  } else {
-    throw Exception("Erro ao responder post: ${response.statusCode}");
+    if (response.statusCode == 201) {
+      final Map<String, dynamic> responseData = jsonDecode(response.body);
+      return Post.fromJson(responseData["reply"]);
+    } else {
+      throw Exception("Erro ao responder post: ${response.statusCode}");
+    }
   }
-}
 
   Future<List<Post>> listPosts(
       {required String token, int? page, int? feed, String? search}) async {
@@ -249,7 +248,7 @@ class ApiService {
         "Authorization": "Bearer $token",
       },
     );
-    
+
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
       return data.map((json) => Post.fromJson(json)).toList();
@@ -267,7 +266,7 @@ class ApiService {
         "Authorization": "Bearer $token",
       },
     );
-    
+
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
       return data.map((json) => Post.fromJson(json)).toList();
@@ -285,7 +284,7 @@ class ApiService {
         "Authorization": "Bearer $token",
       },
     );
-    
+
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
       return data.map((json) => Post.fromJson(json)).toList();
@@ -302,7 +301,7 @@ class ApiService {
         "Authorization": "Bearer $token",
       },
     );
-    
+
     if (response.statusCode == 204) {
       print("Post removido com sucesso");
     } else {
@@ -311,7 +310,6 @@ class ApiService {
   }
 
   Future<bool> likePost(String token, String postId) async {
-  try {
     final response = await http.post(
       Uri.https(baseUrl, "/posts/$postId/likes"),
       headers: {
@@ -327,8 +325,7 @@ class ApiService {
     }
   }
 
-Future<bool> removeLike(String token, String postId) async {
-  try {
+  Future<void> removeLike(String token, String postId) async {
     final response = await http.delete(
       Uri.https(baseUrl, "/posts/$postId/likes"),
       headers: {
@@ -336,9 +333,9 @@ Future<bool> removeLike(String token, String postId) async {
         "Authorization": "Bearer $token",
       },
     );
-    
+
     if (response.statusCode == 201) {
-      print("Post curtido!");
+      print("Post descurtido!");
     } else {
       throw Exception("Erro ao curtir post: ${response.body}");
     }

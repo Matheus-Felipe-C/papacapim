@@ -14,7 +14,7 @@ class Feed extends StatefulWidget {
 }
 
 class _FeedState extends State<Feed> {
-  final FeedController feedController = FeedController();
+  final FeedController feedController = FeedController(authController: null);
   final AuthController authController = AuthController();
   final User user = User(id: 1, name: 'test', username: 'testprofile');
 
