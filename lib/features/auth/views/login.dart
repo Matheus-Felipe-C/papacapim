@@ -16,7 +16,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _login() async {
     String username = _usernameController.text;
-    String password = _usernameController.text;
+    String password = _passwordController.text;
     final auth = context.read<AuthController>();
 
     try {

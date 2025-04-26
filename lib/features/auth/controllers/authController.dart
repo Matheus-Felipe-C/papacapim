@@ -34,6 +34,7 @@ class AuthController extends ChangeNotifier {
     print(newUser);
     print(newSession);
     await saveSessionToPrefs(newSession);
+    _userPass = password;
     notifyListeners();
   }
 
@@ -44,7 +45,7 @@ class AuthController extends ChangeNotifier {
     String? password,
     String? passConfirm,
   ) async {
-    User updatedUser = await ApiService().updateUser(
+    await ApiService().updateUser(
       token!,
       userId,
       login: login,

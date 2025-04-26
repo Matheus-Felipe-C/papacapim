@@ -9,11 +9,13 @@ class ApiService {
   final String baseUrl = "api.papacapim.just.pro.br";
 
   // Cria um usuário
-  Future<User> createUser(
-      {required String login,
-      required String name,
-      required String password,
-      required String passwordConfirm}) async {
+  Future<User> createUser({
+  required String login,
+  required String name,
+  required String password,
+  required String passwordConfirm
+}) async {
+  try {
     print(jsonEncode({
       "user": {
         "login": login,
@@ -36,14 +38,22 @@ class ApiService {
       }),
     );
 
+    print("Response status: ${response.statusCode}");
+    print("Response body: ${response.body}");
+
     if (response.statusCode == 201) {
       final data = jsonDecode(response.body);
       print('Usuário: ${data['login']}');
       return User.fromJson(data);
     } else {
-      throw Exception("Falha ao criar usuário. Código: ${response.body}");
+      throw Exception("Falha ao criar usuário. Body: ${response.body}");
     }
+  } catch (e) {
+    print("Erro de conexão: $e");
+    throw Exception("Erro de conexão: $e");
   }
+}
+
 
   /// Cria uma nova sessão a partir da API
   Future<Session> createSession(String login, String password) async {
@@ -54,7 +64,8 @@ class ApiService {
     if (response.statusCode == 200) {
       return Session.fromJson(jsonDecode(response.body));
     } else {
-      throw Exception("Algo deu errado ao criar uma nova sessão");
+      print("Erro: ${response.body}. StatusCode: ${response.statusCode}");
+      throw Exception("Falha ao criar nova sessão: ${response.body}");
     }
   }
 
