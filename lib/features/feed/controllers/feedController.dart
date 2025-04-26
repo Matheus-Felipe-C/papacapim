@@ -1,8 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:papacapim/api_service.dart';
 import 'package:papacapim/features/auth/models/user.dart';
 import 'package:papacapim/features/feed/models/post.dart';
 
-class FeedController {
+class FeedController extends ChangeNotifier{
   List<Post> posts = [];
 
   // Adiciona um novo post à lista

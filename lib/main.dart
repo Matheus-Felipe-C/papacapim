@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:papacapim/features/auth/controllers/authController.dart';
+import 'package:papacapim/features/auth/controllers/profile_controller.dart';
 import 'package:papacapim/features/auth/views/login.dart';
 import 'package:papacapim/features/auth/views/edit_profile_screen.dart';
 import 'package:papacapim/features/auth/views/signup.dart';
+import 'package:papacapim/features/feed/controllers/feedController.dart';
 import 'package:papacapim/features/feed/views/feed.dart';
 import 'package:papacapim/styles.dart';
 import 'package:provider/provider.dart';
 
 void main() {
   runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (_) => AuthController()),
+    ChangeNotifierProvider(
+      create: (_) => AuthController(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => ProfileController(auth: AuthController()),
+    ),
+    ChangeNotifierProvider(create: (_) => FeedController(),),
   ], child: const MainApp()));
 }
 

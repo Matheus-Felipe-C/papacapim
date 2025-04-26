@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:papacapim/features/auth/controllers/authController.dart';
+import 'package:papacapim/features/auth/models/user.dart';
 import 'package:provider/provider.dart';
 import '../controllers/profile_controller.dart';
 
@@ -15,17 +16,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  late Future<User> _userFuture;
 
   @override
-  Future<void> initState() async {
+  void initState() {
     super.initState();
-    final profile = context.watch<ProfileController>();
-    final auth = context.watch<AuthController>();
-    final user = await profile.getUser(auth.session!.token);
+    final profile = context.read<ProfileController>();
+    final auth = context.read<AuthController>();
 
-    // Initialize text fields with current user data
-    _nameController.text = user.name;
-    _usernameController.text = user.username;
+    _userFuture = profile.getUser(auth.session!.userLogin);
   }
 
   void _saveChanges(String? login, String? name, String? password,
@@ -49,41 +48,48 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Edit Profile")),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _nameController,
-              decoration: const InputDecoration(labelText: "Nome"),
-            ),
-            TextField(
-              controller: _usernameController,
-              decoration: const InputDecoration(labelText: "Usuário"),
-            ),
-            TextField(
-              controller: _passwordController,
-              decoration: const InputDecoration(labelText: "Senha"),
-            ),
-            TextField(
-              controller: _confirmPasswordController,
-              decoration:
-                  const InputDecoration(labelText: "Confirmação de senha"),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                _saveChanges(
-                  _usernameController.text,
-                  _nameController.text,
-                  _passwordController.text,
-                  _confirmPasswordController.text,
-                );
-              },
-              child: const Text("Save Changes"),
-            ),
-          ],
-        ),
+      body: FutureBuilder<User>(
+        future: _userFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator(),);
+          } else if (snapshot.hasError) {
+            return Center(child: Text("Erro: ${snapshot.error}"),);
+          } else if (snapshot.hasData) {
+            final user = snapshot.data!;
+
+            _nameController.text = user.name;
+            _usernameController.text = user.username;
+            _passwordController.text = '';
+            _confirmPasswordController.text = '';
+
+            return Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                children: [
+                  TextField(
+                    controller: _nameController,
+                    decoration: InputDecoration(labelText: "Nome"),
+                  ),
+                  TextField(
+                    controller: _usernameController,
+                    decoration: InputDecoration(labelText: "Nome"),
+                  ),
+                  TextField(
+                    controller: _passwordController,
+                    decoration: InputDecoration(labelText: "Nome"),
+                  ),
+                  TextField(
+                    controller: _confirmPasswordController,
+                    decoration: InputDecoration(labelText: "Nome"),
+                  ),
+                ],
+              ),
+            );
+          } else {
+            return const Center(child: Text("Nenhum dado encontrado"),);
+          }
+        },
       ),
     );
   }
