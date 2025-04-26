@@ -6,11 +6,11 @@ import 'package:papacapim/features/auth/models/session.dart';
 import '../models/user.dart';
 
 class ProfileController extends ChangeNotifier {
-  final AuthController authController;
+  final AuthController auth;
 
-  ProfileController({required this.authController});
+  ProfileController({required this.auth});
 
-  Session? get session => authController.session;
+  Session? get session => auth.session;
 
   Future<User> getUser(String login) async {
     return await ApiService().getUser(session!.token, login);
