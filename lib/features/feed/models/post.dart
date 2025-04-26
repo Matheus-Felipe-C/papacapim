@@ -22,13 +22,13 @@ class Post {
   });
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'user_login': userLogin,
-    'post_id': postId,
-    'message': message,
-    'created_at': createdAt,
-    'updated_at': updatedAt,
-  };
+        'id': id,
+        'user_login': userLogin,
+        'post_id': postId,
+        'message': message,
+        'created_at': createdAt,
+        'updated_at': updatedAt,
+      };
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(

@@ -22,8 +22,12 @@ class AuthController extends ChangeNotifier {
   }
 
   /// Cria um novo usuário e sessão a partir da API
-  Future<bool> createUser(String name, String username, String password,
+  Future<void> createUser(String name, String username, String password,
       String passwordConfirm) async {
+    if (password != passwordConfirm) {
+      throw Exception("As senhas não coincidem");
+    }
+
     User newUser =
         await ApiService().createUser(username, name, password, password);
     Session newSession = await ApiService().createSession(username, password);
@@ -31,7 +35,6 @@ class AuthController extends ChangeNotifier {
     print(newSession);
     await saveSessionToPrefs(newSession);
     notifyListeners();
-    return true;
   }
 
   Future<void> updateUser(
@@ -66,11 +69,11 @@ class AuthController extends ChangeNotifier {
       usedPassword = _userPass!;
     }
 
-    Session newSession = await ApiService().createSession(_session!.userLogin, usedPassword);
+    Session newSession =
+        await ApiService().createSession(_session!.userLogin, usedPassword);
     _session = newSession;
     notifyListeners();
   }
-
 
   /// Salva a sessão
   Future<void> saveSessionToPrefs(Session session) async {

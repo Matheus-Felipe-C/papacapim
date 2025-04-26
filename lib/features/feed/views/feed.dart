@@ -4,7 +4,7 @@ import 'package:papacapim/features/auth/models/user.dart';
 import 'package:papacapim/features/feed/controllers/feedController.dart';
 import 'package:papacapim/features/feed/views/newPostScreen.dart';
 import 'package:papacapim/features/feed/views/postCard.dart';
-import 'package:papacapim/features/feed/views/postDetailScreen.dart';
+import "package:papacapim/features/feed/views/PostDetailScreen.dart";
 
 class Feed extends StatefulWidget {
   const Feed({super.key});
@@ -14,23 +14,21 @@ class Feed extends StatefulWidget {
 }
 
 class _FeedState extends State<Feed> {
-  final FeedController feedController = FeedController(authController: null);
+  final FeedController feedController = FeedController();
   final AuthController authController = AuthController();
-  final User user = User(id: 1, name: 'test', username: 'testprofile');
+  final user = User(id: '1', name: 'testing', username: 'testing');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Feed"),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.person),
-            onPressed: () {
-              Navigator.pushNamed(context, '/profile');
-            },
-          ),
-        ],
+        leading: IconButton(
+          icon: const Icon(Icons.person),
+          onPressed: () {
+            Navigator.pushNamed(context, '/profile');
+          },
+        ),
       ),
       body: ListView.builder(
         itemCount: feedController.posts.length,
@@ -71,9 +69,9 @@ class _FeedState extends State<Feed> {
           if (newPost != null && user != null) {
             setState(() {
               feedController.addPost(
-                  newPost["message"], user!);
+                  newPost["message"], user);
             });
-          } else if (user == null) {
+          } else if (authController == null) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                   content: Text(

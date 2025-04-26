@@ -6,8 +6,9 @@ import 'package:papacapim/features/feed/controllers/feedController.dart';
 class PostDetailScreen extends StatelessWidget {
   final Post post;
   final FeedController feedController;
+  final user = User(id: '1', name: 'test', username: 'test');
 
-  const PostDetailScreen({
+  PostDetailScreen({
     super.key,
     required this.post,
     required this.feedController,
@@ -15,7 +16,6 @@ class PostDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final User user = User(id: 1, username: 'testing', name: 'testing');
     return Scaffold(
       appBar: AppBar(
         title: const Text("Detalhes do Post"),

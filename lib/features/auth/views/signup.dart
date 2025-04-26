@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:papacapim/features/auth/controllers/authController.dart';
 import 'package:papacapim/styles.dart';
+import 'package:provider/provider.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -10,33 +11,29 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  final _nameController = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
   Future<void> _signup() async {
     String name = _nameController.text;
     String username = _usernameController.text;
     String password = _passwordController.text;
     String confirmPassword = _confirmPasswordController.text;
-
-    print("password: $password");
-    print("confirm passsword: $confirmPassword");
+    final auth = context.read<AuthController>();
 
     try {
-    bool success =
-        await AuthController().createUser(name, username, password, confirmPassword);
-        
-      // print("User registered!");
-      // Navigator.pushNamedAndRemoveUntil(
-      //     context,
-      //     '/feed',
-      //     (route) =>
-      //         false); // Redireciona para o feed e remove todos os itens da stack
+      await auth.createUser(name, username, password, confirmPassword);
+      Navigator.pushNamedAndRemoveUntil(
+          context,
+          '/feed',
+          (route) =>
+              false); // Redireciona para o feed e remove todos os itens da stack
     } catch (e) {
-      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Erro: $e")),
+      );
     }
   }
 

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:papacapim/features/auth/controllers/profile_controller.dart';
-import 'package:papacapim/features/auth/models/user.dart';
-import 'package:papacapim/features/feed/controllers/feedController.dart';
-import 'package:papacapim/features/feed/views/PostDetailScreen.dart';
-import 'package:papacapim/features/feed/views/postCard.dart';
-import 'package:papacapim/styles.dart';
+import 'package:papacapim/features/auth/controllers/authController.dart';
+import 'package:provider/provider.dart';
+import '../controllers/profile_controller.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -14,59 +11,76 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final _nameController = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+
+  @override
+  Future<void> initState() async {
+    super.initState();
+    final profile = context.watch<ProfileController>();
+    final auth = context.watch<AuthController>();
+    final user = await profile.getUser(auth.session!.token);
+
+    // Initialize text fields with current user data
+    _nameController.text = user.name;
+    _usernameController.text = user.username;
+  }
+
+  void _saveChanges(String? login, String? name, String? password,
+      String? passConfirm) async {
+    final auth = context.read<AuthController>();
+    final profile = context.read<ProfileController>();
+
+    final user = await profile.getUser(auth.session!.token);
+    await auth.updateUser(user.id, login, name, password, passConfirm);
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Perfil atualizado!")),
+      );
+
+      Navigator.pop(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final profileController = ProfileController();
-    feedController;
-    final User user = User(id: 1, name: 'test', username: 'testprofile');
-
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Perfil"),
-        actions: [
-          ElevatedButton(
-            onPressed: () => Navigator.pushNamed(context, '/edit_profile'),
-            child: const Text("Editar perfil"),
-          ),
-        ],
-      ),
+      appBar: AppBar(title: const Text("Edit Profile")),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(user.name, style: AppStyles.heading),
-            Text(user.username),
-            Expanded(
-              child: ListView.builder(
-                itemCount: feedController.posts.length,
-                itemBuilder: (context, index) {
-                  final post = feedController.posts[index];
-                  return PostCard(
-                    message: post.message,
-                    username: user.username,
-                    likes: post.likes,
-                    isLikedByCurrentUser: post.isLikedByCurrentUser,
-                    onLikePressed: () {
-                      setState(() {
-                        feedController.toggleLike(post);
-                      });
-                    },
-                    onTap: () {
-                      // Navega para a tela de detalhes do post
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PostDetailScreen(
-                            post: post,
-                            feedController: feedController,
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
+            TextField(
+              controller: _nameController,
+              decoration: const InputDecoration(labelText: "Nome"),
+            ),
+            TextField(
+              controller: _usernameController,
+              decoration: const InputDecoration(labelText: "Usuário"),
+            ),
+            TextField(
+              controller: _passwordController,
+              decoration: const InputDecoration(labelText: "Senha"),
+            ),
+            TextField(
+              controller: _confirmPasswordController,
+              decoration:
+                  const InputDecoration(labelText: "Confirmação de senha"),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                _saveChanges(
+                  _usernameController.text,
+                  _nameController.text,
+                  _passwordController.text,
+                  _confirmPasswordController.text,
+                );
+              },
+              child: const Text("Save Changes"),
             ),
           ],
         ),

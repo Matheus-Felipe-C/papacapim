@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:papacapim/features/auth/controllers/authController.dart';
+import 'package:provider/provider.dart';
 import '../../../styles.dart';
 
 class LoginPage extends StatefulWidget {
@@ -13,11 +14,19 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  // TODO refazer a lógica de Login
-  void _login() { 
+  Future<void> _login() async {
     String username = _usernameController.text;
     String password = _usernameController.text;
+    final auth = context.read<AuthController>();
 
+    try {
+      await auth.login(username, password);
+      Navigator.pushNamedAndRemoveUntil(context, '/feed', (route) => false);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Erro: $e")),
+      );
+    }
   }
 
   @override
