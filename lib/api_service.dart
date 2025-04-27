@@ -455,35 +455,70 @@ Future<List<Post>> listPosts({
   }
 }
 
-  Future<bool> likePost(String token, String postId) async {
+Future<bool> likePost(String token, String postId) async {
+  if (token.isEmpty) throw ArgumentError('Token não pode ser vazio');
+  if (postId.isEmpty) throw ArgumentError('Post ID não pode ser vazio');
+
+  try {
     final response = await http.post(
       Uri.https(baseUrl, "/posts/$postId/likes"),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
       },
-    );
+    ).timeout(const Duration(seconds: 10));
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
+    if (response.statusCode == HttpStatus.ok || response.statusCode == HttpStatus.created) {
+      debugPrint("Post $postId curtido com sucesso");
       return true;
     } else {
-      throw Exception("Erro ao curtir post: ${response.body}");
+      final errorData = jsonDecode(response.body);
+      throw ApiException(
+        response.statusCode,
+        errorData['message'] ?? 'Erro ao curtir post',
+      );
     }
+  } on http.ClientException catch (e) {
+    throw Exception('Erro de conexão: ${e.message}');
+  } on TimeoutException {
+    throw Exception('Tempo de requisição excedido');
+  } on FormatException {
+    throw Exception('Resposta do servidor em formato inválido');
+  } catch (e) {
+    throw Exception('Erro ao curtir post: $e');
   }
+}
 
-  Future<void> removeLike(String token, String postId) async {
+Future<bool> removeLike(String token, String postId) async {
+  if (token.isEmpty) throw ArgumentError('Token não pode ser vazio');
+  if (postId.isEmpty) throw ArgumentError('Post ID não pode ser vazio');
+
+  try {
     final response = await http.delete(
       Uri.https(baseUrl, "/posts/$postId/likes"),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
       },
-    );
+    ).timeout(const Duration(seconds: 10));
 
-    if (response.statusCode == 201) {
-      print("Post descurtido!");
+    if (response.statusCode == HttpStatus.ok || response.statusCode == HttpStatus.noContent) {
+      debugPrint("Post $postId descurtido com sucesso");
+      return true;
     } else {
-      throw Exception("Erro ao curtir post: ${response.body}");
+      final errorData = jsonDecode(response.body);
+      throw ApiException(
+        response.statusCode,
+        errorData['message'] ?? 'Erro ao remover curtida',
+      );
     }
+  } on http.ClientException catch (e) {
+    throw Exception('Erro de conexão: ${e.message}');
+  } on TimeoutException {
+    throw Exception('Tempo de requisição excedido');
+  } on FormatException {
+    throw Exception('Resposta do servidor em formato inválido');
+  } catch (e) {
+    throw Exception('Erro ao remover curtida: $e');
   }
 }
