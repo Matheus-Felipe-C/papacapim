@@ -294,23 +294,77 @@ Future<Post> createPost(String token, String message) async {
   }
 }
 
-  Future<List<Post>> listPosts(
-      {required String token, int? page, int? feed, String? search}) async {
+Future<List<Post>> listPosts({
+  required String token,
+  int page = 1,
+  int perPage = 10,
+  int? feed,
+  String? search,
+  bool refresh = false,
+}) async {
+  if (token.isEmpty) {
+    throw ArgumentError('Token de autenticação não pode ser vazio');
+  }
+  
+  final currentPage = refresh ? 1 : page;
+  
+  if (currentPage < 1) {
+    throw ArgumentError('Número da página deve ser maior que 0');
+  }
+  if (perPage < 1 || perPage > 100) {
+    throw ArgumentError('Quantidade por página deve estar entre 1 e 100');
+  }
+
+  try {
+    final queryParams = {
+      'page': currentPage.toString(),
+      'per_page': perPage.toString(),
+      if (feed != null) 'feed': feed.toString(),
+      if (search != null && search.isNotEmpty) 'search': search,
+      'timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
+    };
+
     final response = await http.get(
-      Uri.https(baseUrl, "/posts"),
+      Uri.https(baseUrl, "/posts", queryParams),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
+        'Cache-Control': 'no-cache', 
       },
-    );
+    ).timeout(const Duration(seconds: 15));
 
-    if (response.statusCode == 200) {
-      final List<dynamic> data = jsonDecode(response.body);
-      return data.map((json) => Post.fromJson(json)).toList();
-    } else {
-      throw Exception("Erro ao pegar os posts: ${response.statusCode}");
+    if (response.statusCode == HttpStatus.ok) {
+      final responseData = jsonDecode(response.body);
+      
+      if (responseData is! Map || responseData['posts'] is! List) {
+        throw FormatException('A resposta do servidor não contém a estrutura esperada');
+      }
+      
+      final List<dynamic> postsData = responseData['posts'];
+      return postsData.map((json) => Post.fromJson(json)).toList();
+    } 
+    else {
+      final errorData = jsonDecode(response.body);
+      throw ApiException(
+        response.statusCode,
+        errorData['message'] ?? 'Erro ao carregar posts',
+      );
     }
+  } 
+  
+  on http.ClientException catch (e) {
+    throw Exception('Falha na comunicação com o servidor: ${e.message}');
+  } 
+  on TimeoutException {
+    throw Exception('A requisição demorou muito para responder');
+  } 
+  on FormatException catch (e) {
+    throw Exception('Dados recebidos em formato inválido: ${e.message}');
+  } 
+  catch (e) {
+    throw Exception('Ocorreu um erro inesperado: $e');
   }
+}
 
   Future<List<Post>> listUserPosts(
       {required String token, required String login, String? page}) async {
