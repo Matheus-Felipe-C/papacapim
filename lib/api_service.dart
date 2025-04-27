@@ -403,20 +403,45 @@ Future<List<Post>> listPosts({
   }
 
   Future<void> deletePost(String token, String postId) async {
+  if (token.isEmpty) {
+    throw ArgumentError('Token de autenticação não pode ser vazio');
+  }
+  if (postId.isEmpty) {
+    throw ArgumentError('ID do post não pode ser vazio');
+  }
+
+  try {
     final response = await http.delete(
       Uri.https(baseUrl, "/posts/$postId"),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
       },
-    );
+    ).timeout(const Duration(seconds: 10)); 
 
-    if (response.statusCode == 204) {
-      print("Post removido com sucesso");
+    if (response.statusCode == HttpStatus.noContent) { 
+      debugPrint("Post $postId removido com sucesso");
     } else {
-      throw Exception("Erro ao apagar post: ${response.statusCode}");
+      final errorData = response.body.isNotEmpty 
+          ? jsonDecode(response.body) 
+          : null;
+      
+      throw ApiException(
+        response.statusCode,
+        errorData?['message'] ?? 'Erro ao apagar post',
+      );
     }
+  } 
+  on http.ClientException catch (e) {
+    throw Exception('Falha na comunicação com o servidor: ${e.message}');
+  } on TimeoutException {
+    throw Exception('Tempo de requisição excedido');
+  } on FormatException catch (e) {
+    throw Exception('Resposta do servidor em formato inválido: ${e.message}');
+  } catch (e) {
+    throw Exception('Erro desconhecido ao apagar post: $e');
   }
+}
 
   Future<bool> likePost(String token, String postId) async {
     final response = await http.post(
