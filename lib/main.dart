@@ -10,14 +10,21 @@ import 'package:papacapim/styles.dart';
 import 'package:provider/provider.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final authController = AuthController();
   runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(
-      create: (_) => AuthController(),
+    ChangeNotifierProvider.value(
+      value: authController,
+    ),
+    ChangeNotifierProxyProvider<AuthController, ProfileController>(
+      create: (context) => ProfileController(auth: authController),
+      update: (context, auth, profile) =>
+          profile ?? ProfileController(auth: auth),
     ),
     ChangeNotifierProvider(
-      create: (_) => ProfileController(auth: AuthController()),
+      create: (_) => FeedController(),
     ),
-    ChangeNotifierProvider(create: (_) => FeedController(),),
   ], child: const MainApp()));
 }
 

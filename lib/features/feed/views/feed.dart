@@ -28,7 +28,7 @@ class _FeedState extends State<Feed> {
     });
 
     try {
-      await feedController.loadPosts(refresh: refresh);
+      // await feedController.loadPosts(refresh: refresh);
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(

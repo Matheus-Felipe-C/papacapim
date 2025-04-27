@@ -7,23 +7,83 @@ import '../models/user.dart';
 
 class ProfileController extends ChangeNotifier {
   final AuthController auth;
+  bool _isLoading = false;
+  User? _user;
+  String? _error;
 
-  ProfileController({required this.auth});
+  ProfileController({required this.auth}) {
+    auth.addListener(_onAuthChange);
+    _initUser();
+  }
 
-  Session? get session => auth.session;
+  String? get error => _error;
+  bool get isLoading => _isLoading;
+  User? get user => _user;
 
-  Future<User> getUser(String login) async {
-    return await ApiService().getUser(session!.token, login);
+  void _onAuthChange() {
+    if (auth.session != null && _user == null) {
+      getUser();
+    } else if (auth.session == null) {
+      _user = null;
+      notifyListeners();
+    }
+  }
+
+  Future<void> _initUser() async {
+    if (auth.isLoadingSession) {
+      await Future.doWhile(() => auth.isLoadingSession);
+    }
+
+    if (auth.session != null) {
+      await getUser();
+    }
+  }
+
+  @override
+  void dispose() {
+    auth.removeListener(_onAuthChange);
+    super.dispose();
+  }
+
+  Future<void> getUser() async {
+    try {
+      if (auth.isLoadingSession) {
+        await Future.doWhile(() => auth.isLoadingSession);
+      }
+      
+      if (auth.session == null || auth.token == null) {
+        _error = "Não foi possível carregar a sessão";
+        notifyListeners();
+        return;
+      }
+      
+      _isLoading = true;
+      _error = null;
+      notifyListeners();
+
+      _user = await ApiService().getUser(auth.session!.token, auth.session!.userLogin);
+
+      if (_user == null) {
+        _error = "Erro ao carregar dados de usuário";
+      }
+
+      print("Usuário carregado com sucesso: ${_user?.toString()}");
+    } catch (e) {
+      _error = 'Erro ao carregar usuário: ${e.toString()}';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+    
   }
 
   Future<void> deleteUser() async {
-    final user = await getUser(session!.userLogin);
-    await ApiService().deleteUser(session!.token, user.id);
+    await ApiService().deleteUser(auth.token!, _user!.id);
   }
 
   Future<List<User>> getUserList({int? page, String? search}) async {
     final users = await ApiService()
-        .getUserList(token: session!.token, page: page, search: search);
+        .getUserList(token: auth.token!, page: page, search: search);
     return users;
   }
 }

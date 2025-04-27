@@ -9,16 +9,53 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AuthController extends ChangeNotifier {
   Session? _session;
   String? _userPass;
+  bool _isLoadingSession = true;
 
   Session? get session => _session;
   String? get token => _session?.token;
   String? get userPass => _userPass;
+  bool get isLoadingSession => _isLoadingSession;
+
+  AuthController() {
+    _loadSession();
+  }
+
+  Future<void> _loadSession() async {
+    _isLoadingSession = true;
+    notifyListeners();
+
+    final prefs = await SharedPreferences.getInstance();
+    final sessionJson = prefs.getString('session');
+
+    if (sessionJson != null) {
+      try {
+        _session = Session.fromJson(jsonDecode(sessionJson));
+        notifyListeners();
+      } catch (e) {
+        print("Erro ao carregar sessão: $e");
+        await prefs.remove('session');
+      }
+    }
+
+    _isLoadingSession = false;
+    notifyListeners();
+  }
+
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('session');
+    _session = null;
+    _userPass = null;
+    notifyListeners();
+  }
 
   // Cria um novo usuário
   Future<void> login(String login, String password) async {
     final session = await ApiService().createSession(login, password);
     await saveSessionToPrefs(session);
+    print("New user session: ${session.token}");
     _userPass = password;
+    notifyListeners();
   }
 
   /// Cria um novo usuário e sessão a partir da API
@@ -82,5 +119,6 @@ class AuthController extends ChangeNotifier {
     String userJson = jsonEncode(session.toJson());
     await prefs.setString('session', userJson);
     _session = session;
+    print(_session!.userLogin);
   }
 }

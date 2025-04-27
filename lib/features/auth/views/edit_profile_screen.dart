@@ -16,79 +16,77 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  late Future<User> _userFuture;
 
   @override
-  void initState() {
-    super.initState();
-    final profile = context.read<ProfileController>();
-    final auth = context.read<AuthController>();
-
-    _userFuture = profile.getUser(auth.session!.userLogin);
-  }
-
-  void _saveChanges(String? login, String? name, String? password,
-      String? passConfirm) async {
+void initState() {
+  super.initState();
+  WidgetsBinding.instance.addPostFrameCallback((_) async {
     final auth = context.read<AuthController>();
     final profile = context.read<ProfileController>();
 
-    final user = await profile.getUser(auth.session!.token);
-    await auth.updateUser(user.id, login, name, password, passConfirm);
-
-    if (mounted) {
+    if (auth.session == null && !auth.isLoadingSession) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Perfil atualizado!")),
+        const SnackBar(content: Text("Erro: Sessão não encontrada")),
       );
-
-      Navigator.pop(context);
+    } else if (profile.user == null && !profile.isLoading) {
+      await profile.getUser();
     }
+  });
+}
+
+  Future<void> _saveChanges() async {
+    
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Edit Profile")),
-      body: FutureBuilder<User>(
-        future: _userFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator(),);
-          } else if (snapshot.hasError) {
-            return Center(child: Text("Erro: ${snapshot.error}"),);
-          } else if (snapshot.hasData) {
-            final user = snapshot.data!;
-
-            _nameController.text = user.name;
-            _usernameController.text = user.username;
-            _passwordController.text = '';
-            _confirmPasswordController.text = '';
-
-            return Padding(
-              padding: const EdgeInsets.all(20.0),
+      appBar: AppBar(title: const Text("Editar Perfil")),
+      body: Consumer<ProfileController>(
+        builder: (context, provider, child) {
+          if (provider.error != null) {
+            return Center(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TextField(
-                    controller: _nameController,
-                    decoration: InputDecoration(labelText: "Nome"),
-                  ),
-                  TextField(
-                    controller: _usernameController,
-                    decoration: InputDecoration(labelText: "Nome"),
-                  ),
-                  TextField(
-                    controller: _passwordController,
-                    decoration: InputDecoration(labelText: "Nome"),
-                  ),
-                  TextField(
-                    controller: _confirmPasswordController,
-                    decoration: InputDecoration(labelText: "Nome"),
+                  Text(provider.error!),
+                  const SizedBox(height: 20,),
+                  ElevatedButton(onPressed: provider.getUser, child: const Text('Tente novamente'),
                   ),
                 ],
               ),
             );
-          } else {
-            return const Center(child: Text("Nenhum dado encontrado"),);
           }
+
+          if (provider.isLoading) {
+            return const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(),
+                  SizedBox(height: 16,),
+                  Text("Carregando perfil..."),
+                ],
+              ),
+            );
+          }
+
+          if (provider.user == null) {
+            return const Center(child: Text("Não foi possível pegar dados de perfil"),);
+          }
+
+          final profile = provider.user!;
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Name: ${profile.name}"),
+                const SizedBox(height: 8,),
+                Text("Username: ${profile.username}"),
+              ],
+            ),
+          );
         },
       ),
     );
