@@ -17,6 +17,37 @@ class _FeedState extends State<Feed> {
   final FeedController feedController = FeedController();
   final AuthController authController = AuthController();
   final user = User(id: 1, name: 'testing', username: 'testing');
+  bool _isLoading = false; // Adicionado estado para controle de loading
+
+  // Função para carregar/recarregar os posts
+  Future<void> _loadPosts({bool refresh = false}) async {
+    if (!mounted) return;
+    
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await feedController.loadPosts(refresh: refresh);
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao carregar posts: ${e.toString()}')),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPosts(); // Carrega os posts inicialmente
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,34 +61,38 @@ class _FeedState extends State<Feed> {
           },
         ),
       ),
-      body: ListView.builder(
-        itemCount: feedController.posts.length,
-        itemBuilder: (context, index) {
-          final post = feedController.posts[index];
-          return PostCard(
-            message: post.message,
-            username: user.username,
-            likes: post.likes,
-            isLikedByCurrentUser: post.isLikedByCurrentUser,
-            onLikePressed: () {
-              setState(() {
-                feedController.toggleLike(post);
-              });
-            },
-            onTap: () {
-              // Navega para a tela de detalhes do post
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PostDetailScreen(
-                    post: post,
-                    feedController: feedController,
-                  ),
-                ),
-              );
-            },
-          );
-        },
+      body: RefreshIndicator(
+        onRefresh: () => _loadPosts(refresh: true), // Atualiza os posts quando puxar para baixo
+        child: _isLoading && feedController.posts.isEmpty
+            ? const Center(child: CircularProgressIndicator())
+            : ListView.builder(
+                itemCount: feedController.posts.length,
+                itemBuilder: (context, index) {
+                  final post = feedController.posts[index];
+                  return PostCard(
+                    message: post.message,
+                    username: user.username,
+                    likes: post.likes,
+                    isLikedByCurrentUser: post.isLikedByCurrentUser,
+                    onLikePressed: () {
+                      setState(() {
+                        feedController.toggleLike(post);
+                      });
+                    },
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PostDetailScreen(
+                            post: post,
+                            feedController: feedController,
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
@@ -68,8 +103,7 @@ class _FeedState extends State<Feed> {
 
           if (newPost != null && user != null) {
             setState(() {
-              feedController.addPost(
-                  newPost["message"], user);
+              feedController.addPost(newPost["message"], user);
             });
           } else if (authController == null) {
             ScaffoldMessenger.of(context).showSnackBar(
