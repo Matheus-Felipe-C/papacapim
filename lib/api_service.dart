@@ -4,6 +4,18 @@ import 'package:papacapim/features/auth/models/session.dart';
 import 'package:papacapim/features/auth/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:papacapim/features/feed/models/post.dart';
+import 'dart:io';
+import 'package:flutter/foundation.dart';
+
+class ApiException implements Exception {
+  final int statusCode;
+  final String message;
+
+  ApiException(this.statusCode, this.message);
+
+  @override
+  String toString() => 'ApiException: $statusCode - $message';
+}
 
 class ApiService {
   final String baseUrl = "api.papacapim.just.pro.br";
