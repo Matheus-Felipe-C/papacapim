@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:papacapim/features/auth/controllers/authController.dart';
 import 'package:papacapim/features/auth/models/user.dart';
+import 'package:papacapim/styles.dart';
 import 'package:provider/provider.dart';
 import '../controllers/profile_controller.dart';
 
@@ -35,13 +36,21 @@ void initState() {
 }
 
   Future<void> _saveChanges() async {
-    
+    print("Arou");
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Editar Perfil")),
+      appBar: AppBar(
+        title: const Text("Editar Perfil"),
+        actions: [
+          TextButton(
+            onPressed: _saveChanges,
+            child: const Text("Salvar"),
+          ),
+        ],  
+      ),
       body: Consumer<ProfileController>(
         builder: (context, provider, child) {
           if (provider.error != null) {
@@ -76,14 +85,35 @@ void initState() {
           }
 
           final profile = provider.user!;
+          _nameController.text = profile.name;
+          _usernameController.text = profile.username;
+          _passwordController.text = '';
+          _confirmPasswordController.text = ''; 
           return Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Name: ${profile.name}"),
-                const SizedBox(height: 8,),
-                Text("Username: ${profile.username}"),
+                const Text("Editar perfil", style: AppStyles.heading,),
+                const SizedBox(height: 20),
+                TextField(
+                  controller: _nameController,
+                  decoration: AppStyles.textFieldDecoration("Nome"),
+                ),
+                TextField(
+                  controller: _usernameController,
+                  decoration: AppStyles.textFieldDecoration("Nome de usuário"),
+                ),
+                TextField(
+                  controller: _passwordController,
+                  decoration: AppStyles.textFieldDecoration("Senha"),
+                  obscureText: true,
+                ),
+                TextField(
+                  controller: _confirmPasswordController,
+                  decoration: AppStyles.textFieldDecoration("Confirme a senha"),
+                  obscureText: true,
+                ),
               ],
             ),
           );
