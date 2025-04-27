@@ -16,7 +16,7 @@ class Feed extends StatefulWidget {
 class _FeedState extends State<Feed> {
   final FeedController feedController = FeedController();
   final AuthController authController = AuthController();
-  final user = User(id: 1, name: 'testing', username: 'testing');
+  final user = User( name: 'testing', username: 'testing');
   bool _isLoading = false; // Adicionado estado para controle de loading
 
   // Função para carregar/recarregar os posts

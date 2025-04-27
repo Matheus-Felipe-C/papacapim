@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:papacapim/api_service.dart';
 import 'package:papacapim/features/auth/controllers/authController.dart';
-import 'package:papacapim/features/auth/models/session.dart';
 
 import '../models/user.dart';
 
@@ -61,6 +60,9 @@ class ProfileController extends ChangeNotifier {
       _error = null;
       notifyListeners();
 
+      print("Chamando api service.");
+      print("token: ${auth.session!.token}.");
+      print("Login: ${auth.session!.userLogin}");
       _user = await ApiService().getUser(auth.session!.token, auth.session!.userLogin);
 
       if (_user == null) {
@@ -75,10 +77,6 @@ class ProfileController extends ChangeNotifier {
       notifyListeners();
     }
     
-  }
-
-  Future<void> deleteUser() async {
-    await ApiService().deleteUser(auth.token!, _user!.id);
   }
 
   Future<List<User>> getUserList({int? page, String? search}) async {

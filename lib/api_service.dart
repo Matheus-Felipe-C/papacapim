@@ -160,6 +160,8 @@ class ApiService {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
+      print("Data");
+      print(data);
       return User.fromJson(data);
     } else {
       throw Exception('''

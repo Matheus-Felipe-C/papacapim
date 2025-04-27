@@ -6,7 +6,7 @@ import 'package:papacapim/features/feed/controllers/feedController.dart';
 class PostDetailScreen extends StatelessWidget {
   final Post post;
   final FeedController feedController;
-  final user = User(id: 1, name: 'test', username: 'test');
+  final user = User( name: 'test', username: 'test');
 
   PostDetailScreen({
     super.key,
