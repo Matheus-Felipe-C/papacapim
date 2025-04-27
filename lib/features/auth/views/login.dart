@@ -34,12 +34,11 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: AppBar(title: const Text("Login")),
       body: Center(
-        // ⬅️ This centers the Column on the screen
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Column(
             mainAxisSize: MainAxisSize
-                .min, // ⬅️ Ensures the column only takes the necessary space
+                .min,
             children: [
               const Text("Faça login", style: AppStyles.heading),
               const SizedBox(height: 20),
