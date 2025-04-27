@@ -253,27 +253,46 @@ Future<Post> createPost(String token, String message) async {
   }
 }
 
-  Future<Post> replyPost(String token, String postId, String message) async {
+ Future<Post> replyPost(String token, String postId, String message) async {
+  if (token.isEmpty) throw ArgumentError('Token não pode ser vazio');
+  if (postId.isEmpty) throw ArgumentError('ID do post não pode ser vazio');
+  if (message.isEmpty) throw ArgumentError('Mensagem não pode ser vazia');
+
+  try {
     final response = await http.post(
       Uri.https(baseUrl, "/posts/$postId/replies"),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
       },
-      body: {
+      body: json.encode({ 
         "reply": {
           "message": message,
         }
-      },
-    );
+      }),
+    ).timeout(const Duration(seconds: 10));
 
-    if (response.statusCode == 201) {
-      final Map<String, dynamic> responseData = jsonDecode(response.body);
+    final responseData = jsonDecode(response.body);
+
+    if (response.statusCode == HttpStatus.created) { 
+      debugPrint('Resposta criada com sucesso para o post $postId');
       return Post.fromJson(responseData["reply"]);
     } else {
-      throw Exception("Erro ao responder post: ${response.statusCode}");
+      throw ApiException(
+        response.statusCode,
+        responseData['error'] ?? 'Erro ao responder post',
+      );
     }
+  } on http.ClientException catch (e) {
+    throw Exception('Erro de conexão: ${e.message}');
+  } on TimeoutException {
+    throw Exception('Tempo de requisição excedido');
+  } on FormatException {
+    throw Exception('Resposta do servidor em formato inválido');
+  } catch (e) {
+    throw Exception('Erro ao responder post: $e');
   }
+}
 
   Future<List<Post>> listPosts(
       {required String token, int? page, int? feed, String? search}) async {
