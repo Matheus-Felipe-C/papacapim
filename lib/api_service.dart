@@ -223,24 +223,35 @@ class ApiService {
     }
   }
 
-  Future<Post> createPost(String token, String message) async {
-    final response = await http.post(Uri.https(baseUrl, "/posts"), headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $token",
-    }, body: {
-      "post": {
-        "message": message,
-      }
-    });
+  import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+Future<Post> createPost(String token, String message) async {
+  try {
+    final response = await http.post(
+      Uri.https(baseUrl, "/posts"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+      body: json.encode({
+        "post": {
+          "message": message,
+        }
+      }),
+    );
 
     if (response.statusCode == 201) {
+      print("Post criado com sucesso");
       final Map<String, dynamic> responseData = json.decode(response.body);
       return Post.fromJson(responseData["post"]);
-      print("Post criado");
     } else {
-      throw Exception("Erro ao criar post: ${response.statusCode}");
+      throw Exception("Erro ao criar post: ${response.statusCode}\n${response.body}");
     }
+  } catch (e) {
+    throw Exception("Erro na comunicação com o servidor: $e");
   }
+}
 
   Future<Post> replyPost(String token, String postId, String message) async {
     final response = await http.post(
