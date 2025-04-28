@@ -8,7 +8,7 @@ class FeedController extends ChangeNotifier{
 
   // Adiciona um novo post à lista
   Future<void> addPost(String message, User user) async {
-    // Post post = await ApiService().createPost(token, message);
+    
   }
 
   // Alterna entre curtir e descurtir um post

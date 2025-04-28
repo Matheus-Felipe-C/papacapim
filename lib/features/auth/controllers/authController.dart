@@ -76,10 +76,10 @@ class AuthController extends ChangeNotifier {
   }
 
   Future<void> updateUser(
-    String? login,
-    String? name,
-    String? password,
-    String? passConfirm,
+    String login,
+    String name,
+    String password,
+    String passConfirm,
   ) async {
     await ApiService().updateUser(
       token!,
@@ -89,26 +89,7 @@ class AuthController extends ChangeNotifier {
       passwordConfirmation: passConfirm,
     );
 
-    // Determina qual senha utilizar para re-autenticação
-    late String usedPassword;
-
-    if (password != null && passConfirm != null) {
-      if (password != passConfirm) {
-        throw Exception('As senhas não coincidem.');
-      }
-      usedPassword = password;
-      _userPass = password;
-    } else {
-      if (_userPass == null) {
-        throw Exception('Senha atual desconhecida. Faça login novamente.');
-      }
-      usedPassword = _userPass!;
-    }
-
-    Session newSession =
-        await ApiService().createSession(_session!.userLogin, usedPassword);
-    _session = newSession;
-    await saveSessionToPrefs(newSession);
+    await logout();
     notifyListeners();
   }
 

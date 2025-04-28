@@ -62,7 +62,7 @@ class ApiService {
     if (response.statusCode == 200) {
       return Session.fromJson(jsonDecode(response.body));
     } else {
-      print("Erro: ${response.body}. StatusCode: ${response.statusCode}");
+      print("Falha ao criar nova sessão: ${response.body}. StatusCode: ${response.statusCode}");
       throw Exception("Falha ao criar nova sessão: ${response.body}");
     }
   }
@@ -86,29 +86,22 @@ class ApiService {
   }
 
   Future<User> updateUser(String token,
-      {String? login,
-      String? name,
-      String? password,
-      String? passwordConfirmation}) async {
+      {required String login,
+      required String name,
+      required String password,
+      required String passwordConfirmation}) async {
     final Map<String, dynamic> body = {};
 
-    final hasPassword = password != null && password.isNotEmpty;
-    final hasConfirmation =
-        passwordConfirmation != null && passwordConfirmation.isNotEmpty;
-
-    if (login != null) body['login'] = login;
-    if (name != null) body['name'] = name;
+    final hasPassword = password.isNotEmpty;
+    final hasConfirmation = passwordConfirmation.isNotEmpty;
 
     if (hasPassword || hasConfirmation) {
       if (password != passwordConfirmation) {
         throw Exception("As senhas não coincidem");
       }
-
-      body['password'] = password;
-      body['password_confirmation'] = passwordConfirmation;
     }
 
-    final response = await http.patch(Uri.https(baseUrl, "/users"),
+    final response = await http.patch(Uri.https(baseUrl, "/users/1"),
         headers: {
           "Content-Type": "application/json",
           "x-session-token": token,
