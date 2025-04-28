@@ -35,8 +35,18 @@ void initState() {
   });
 }
 
-  Future<void> _saveChanges() async {
-    print("Arou");
+  Future<void> _saveChanges({String? login, String? name, String? password, String? confirmPassword}) async {
+    final auth = context.read<AuthController>();
+
+    try {
+      await auth.updateUser(login, name, password, confirmPassword);
+      print("Usuário atualizado!");
+      Navigator.pushNamedAndRemoveUntil(context, '/profile', (route) => false);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Erro: $e")),
+      );
+    }
   }
 
   @override

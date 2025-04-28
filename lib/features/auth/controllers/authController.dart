@@ -76,7 +76,6 @@ class AuthController extends ChangeNotifier {
   }
 
   Future<void> updateUser(
-    int userId,
     String? login,
     String? name,
     String? password,
@@ -84,7 +83,6 @@ class AuthController extends ChangeNotifier {
   ) async {
     await ApiService().updateUser(
       token!,
-      userId,
       login: login,
       name: name,
       password: password,
@@ -110,6 +108,7 @@ class AuthController extends ChangeNotifier {
     Session newSession =
         await ApiService().createSession(_session!.userLogin, usedPassword);
     _session = newSession;
+    await saveSessionToPrefs(newSession);
     notifyListeners();
   }
 

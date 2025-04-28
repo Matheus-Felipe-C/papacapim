@@ -85,7 +85,7 @@ class ApiService {
     }
   }
 
-  Future<User> updateUser(String token, int userID,
+  Future<User> updateUser(String token,
       {String? login,
       String? name,
       String? password,
@@ -111,14 +111,24 @@ class ApiService {
     final response = await http.patch(Uri.https(baseUrl, "/users"),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer $token",
+          "x-session-token": token,
         },
-        body: jsonEncode(body));
+        body: jsonEncode({
+          "user": {
+            "login": login,
+            "name": name,
+            "password": password,
+            "password_confirmation": passwordConfirmation
+          }
+        }));
 
     if (response.statusCode == 200 || response.statusCode == 204) {
       return User.fromJson(jsonDecode(response.body));
     } else {
-      throw Exception("Algo deu errado ao realizar as alterações");
+      print("Erro ao editar usuário: ");
+      print("Status: ${response.statusCode}");
+      print("Body: ${response.body}");
+      throw Exception("Erro ao editar usuário: ${response.statusCode}");
     }
   }
 
