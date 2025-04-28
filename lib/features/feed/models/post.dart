@@ -1,9 +1,9 @@
 import 'package:papacapim/features/auth/models/user.dart';
 
 class Post {
-  String id;
+  int id;
   String userLogin;
-  String? postId;
+  int? postId;
   String message; // Conteúdo do post
   int likes; // Número de curtidas
   bool isLikedByCurrentUser; // Indica se o usuário atual curtiu o post

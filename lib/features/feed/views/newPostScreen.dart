@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:papacapim/features/auth/controllers/authController.dart';
+import 'package:papacapim/features/feed/controllers/feedController.dart';
 import 'package:papacapim/styles.dart';
+import 'package:provider/provider.dart';
 
 class NewPostScreen extends StatefulWidget {
     const NewPostScreen({super.key});
@@ -11,10 +14,15 @@ class NewPostScreen extends StatefulWidget {
 class _NewPostScreenState extends State<NewPostScreen> {
     final TextEditingController _contentController = TextEditingController();
     
-    void _submitPost(BuildContext context){
+    Future<void> _submitPost(BuildContext context) async {
         if (_contentController.text.isEmpty) return;
 
-        Navigator.pop(context, {"message": _contentController.text});
+        final feed = context.read<FeedController>();
+        final auth = context.read<AuthController>();
+
+        await feed.addPost(_contentController.text, auth.token!);
+
+        Navigator.pop(context, true);
     }
 
     @override

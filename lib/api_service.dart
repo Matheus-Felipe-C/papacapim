@@ -240,7 +240,7 @@ Body: ${response.body}
   Future<Post> createPost(String token, String message) async {
     final response = await http.post(Uri.https(baseUrl, "/posts"), headers: {
       "Content-Type": "application/json",
-      "Authorization": "Bearer $token",
+      "x-session-token": token
     }, body: {
       "post": {
         "message": message,
@@ -249,8 +249,8 @@ Body: ${response.body}
 
     if (response.statusCode == 201) {
       final Map<String, dynamic> responseData = json.decode(response.body);
-      return Post.fromJson(responseData["post"]);
       print("Post criado");
+      return Post.fromJson(responseData["post"]);
     } else {
       throw Exception("Erro ao criar post: ${response.statusCode}");
     }
@@ -284,7 +284,7 @@ Body: ${response.body}
       Uri.https(baseUrl, "/posts"),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
+        "x-session-token": token,
       },
     );
 
